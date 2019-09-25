@@ -72,4 +72,23 @@ public class Task17Application {
 		}
 		return people;
 	}
+
+	public static Person addPerson(Person person) {
+		//person.setPersonID();
+		String sql = "INSERT INTO Person(FirstName, LastName, DateOfBirth, AddressID) VALUES(?,?,?,?)";
+		Connection conn = null;
+		try {
+			conn = connect();
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, person.getFirstName());
+			pstmt.setString(2, person.getLastName());
+			pstmt.setString(3, person.getBirthDate());
+			pstmt.setInt(4, person.getAddressID());
+			pstmt.execute();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		System.out.println(person);
+		return person;
+	}
 }
