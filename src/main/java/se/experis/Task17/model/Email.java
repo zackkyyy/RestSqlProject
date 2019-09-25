@@ -4,14 +4,14 @@ public class Email {
 
     int emailID;
     int personID;
-    String emailAddress;
-    String emailType;
+    String workEmail;
+    String personalEmail;
 
-    public Email(int emailID, int personID, String emailAddress, String emailType) {
+    public Email(int emailID, int personID, String workEmail, String personalEmail) {
         this.emailID = emailID;
         this.personID = personID;
-        this.emailAddress = emailAddress;
-        this.emailType = emailType;
+        this.workEmail = workEmail;
+        this.personalEmail = personalEmail;
     }
 
     public int getEmailID() {
@@ -30,20 +30,19 @@ public class Email {
         this.personID = personID;
     }
 
-    public String getEmailAddress() {
-        return emailAddress;
+    public String getWorkEmail() {
+        return workEmail;
     }
 
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
+    public void setWorkEmail(String workEmail) {
+        this.workEmail = workEmail;
     }
 
-    public String getEmailType() {
-        return emailType;
+    public String getPersonalEmail() {
+        return personalEmail;
     }
 
-    public void setEmailType(String emailType) {
-        this.emailType = emailType;
+    public void setPersonalEmail(String personalEmail) {
+        this.personalEmail = personalEmail;
     }
-
 }

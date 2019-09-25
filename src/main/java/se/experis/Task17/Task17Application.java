@@ -59,6 +59,7 @@ public class Task17Application {
 
 	public static ArrayList<Email> getPersonsEmails(int id ){
 		ArrayList<Email> emails = getALLEmails();
+		System.out.println(emails);
 		ArrayList<Email> returnedList = new ArrayList<>();
 		for (Email email : emails){
 
@@ -146,7 +147,7 @@ public class Task17Application {
 	}
 	public static ArrayList<Email> getALLEmails(){
 		ArrayList<Email> emails = new ArrayList<>();
-		String sql = "SELECT ID , Personal , Work  , PersonID FROM Phonenumber";
+		String sql = "SELECT ID , Personal , Work  , PersonID FROM Email";
 		try {
 			conn = connect();
 			Statement stmt = conn.createStatement();
