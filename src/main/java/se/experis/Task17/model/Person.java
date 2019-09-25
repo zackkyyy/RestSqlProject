@@ -8,9 +8,6 @@ public class Person {
     int personID;
     int addressID;
 
-    public Person() {
-    }
-
     public Person(String firstName, String lastName, String birthDate, int personID, int addressID) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -19,11 +16,7 @@ public class Person {
         this.addressID = addressID;
     }
 
-    public Person (String firstName, String lastName , String birthDate){
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.birthDate = birthDate;
-    }
+
     @Override
     public String toString() {
         return "Person{" +
