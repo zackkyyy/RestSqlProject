@@ -10,7 +10,7 @@ import se.experis.Task17.model.PhoneNumber;
 
 import java.util.ArrayList;
 
-@RestController
+@RestController("/person")
 public class personController {
     @GetMapping("/person")
     public ArrayList<Person> PersonGetALL(){
