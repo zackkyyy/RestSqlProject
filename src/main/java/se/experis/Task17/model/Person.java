@@ -1,12 +1,18 @@
 package se.experis.Task17.model;
 
 
+import java.util.ArrayList;
+
 public class Person {
     String firstName;
     String lastName ;
     String birthDate;
     int personID;
     int addressID;
+    ArrayList<PhoneNumber> phoneNumber;
+    ArrayList<Email> emails;
+    Address address  ;
+
 
     public Person(String firstName, String lastName, String birthDate, int personID, int addressID) {
         this.firstName = firstName;
@@ -71,4 +77,27 @@ public class Person {
         this.addressID = addressID;
     }
 
+    public void setPhoneNumber(ArrayList<PhoneNumber> phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public ArrayList<PhoneNumber> getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public ArrayList<Email> getEmails() {
+        return emails;
+    }
+
+    public void setEmails(ArrayList<Email> emails) {
+        this.emails = emails;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 }

@@ -3,14 +3,15 @@ package se.experis.Task17.model;
 
 public class Address {
 
-    int addressID;
+    int ID;
     String street;
     String city;
     String country;
-    int postalCode;
+    String postalCode;
 
 
-    public Address(String street, String city, String country, int postalCode) {
+    public Address(int id ,String street, String city, String country, String postalCode) {
+        this.ID = id;
         this.street = street;
         this.city = city;
         this.country = country;
@@ -23,14 +24,6 @@ public class Address {
 
     public void setStreet(String street) {
         this.street = street;
-    }
-
-    public int getAddressID() {
-        return addressID;
-    }
-
-    public void setAddressID(int addressID) {
-        this.addressID = addressID;
     }
 
     public String getCity() {
@@ -49,11 +42,19 @@ public class Address {
         this.country = country;
     }
 
-    public int getPostalCode() {
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public String getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(int postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 }
