@@ -46,7 +46,7 @@ public class personController {
         System.out.println("Trying to find person: " + name);
         Person returnPerson = null;
         for (Person person : Task17Application.people) {
-            if (person.getName().contains(name)) {
+            if (person.getName().toLowerCase().contains(name.toLowerCase())) {
                 System.out.println(" --- PERSON FOUND --- ");
                 returnPerson = person;
             }

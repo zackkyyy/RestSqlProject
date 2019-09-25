@@ -20,6 +20,7 @@ public class Task17Application {
 	public static void main(String[] args) {
 		conn = connect();
 		people = getAllPersons();
+		phoneNumbers= getAllPhoneNumbers();
 		SpringApplication.run(Task17Application.class, args);
 
 	}
@@ -29,16 +30,6 @@ public class Task17Application {
 			conn = DriverManager.getConnection(databaseURL);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
-			System.out.println("SQLExeption");
-		}finally {
-			try {
-				if (conn != null)
-				conn.close();
-			}
-			catch (Exception e){
-				System.out.println("Something went wrong.");
-				System.out.println(e.toString());
-			}
 		}
 		return conn;
 	}
@@ -46,7 +37,6 @@ public class Task17Application {
 
 	public static ArrayList<Person> getAllPersons() {
 		String sql = "SELECT ID, FirstName, LastName , DateOfBirth , AddressID FROM Person";
-		Connection conn = null;
 		try {
 			conn = connect();
 			Statement stmt = conn.createStatement();
@@ -77,7 +67,6 @@ public class Task17Application {
 	public static ArrayList<PhoneNumber> getAllPhoneNumbers(){
 		ArrayList<PhoneNumber> phones = new ArrayList<>();
 		String sql = "SELECT ID , Personal , Work  , PersonID FROM Phonenumber";
-		Connection conn = null;
 		try {
 			conn = connect();
 			Statement stmt = conn.createStatement();
