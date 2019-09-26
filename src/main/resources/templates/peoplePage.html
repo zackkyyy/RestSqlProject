@@ -6,6 +6,9 @@
 </head>
 <body>
 <h>This is a testing page</h>
-<p th:text="'Person: ' + ${person.firstName}" />
-</body>
+<ul th:each="person: ${people}">
+    <li th:text="${person.firstName}" />
+    <td th:text="${person.lastName}" />
+    <br>
+</ul></body>
 </html>
