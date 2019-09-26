@@ -163,22 +163,77 @@ public class DbHandler {
 
 
 
-    public  Person addPerson(Person person) {
-        //person.setPersonID();
-        String sql = "INSERT INTO Person(FirstName, LastName, DateOfBirth, AddressID) VALUES(?,?,?,?)";
+    public  Person addPerson(Person person , Address adress) {
         Connection conn = null;
+        try {
+            conn = this.connect();
+            Statement stmt = conn.createStatement();
+            String insertSql = "INSERT INTO Address(Street, City, PostalCode, Country) VALUES(?,?,?,?)";
+            PreparedStatement pstmt = conn.prepareStatement(insertSql);
+            pstmt.setString(1, adress.getStreet());
+            pstmt.setString(2, adress.getCity());
+            pstmt.setString(3, adress.getPostalCode());
+            pstmt.setString(4, adress.getCountry());
+            pstmt.execute();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+
+        int tempAddressId = 0;
+        try {
+            tempAddressId = getLastIdFromAddress();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        String sql = "INSERT INTO Person(FirstName, LastName, DateOfBirth, AddressID) VALUES(?,?,?,?)";
         try {
             conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, person.getFirstName());
             pstmt.setString(2, person.getLastName());
             pstmt.setString(3, person.getBirthDate());
-            pstmt.setInt(4, person.getAddressID());
+            pstmt.setInt(4, tempAddressId);
             pstmt.execute();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        System.out.println(person);
+
         return person;
     }
+
+    public int getLastIdFromAddress() throws SQLException {
+        String sql = "SELECT ID FROM Address";
+        int lastID = 0;
+        Connection conn = null;
+        try {
+            conn = this.connect();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (!rs.next()) {
+                lastID = rs.getInt("ID");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                    ;
+                }
+            }
+        }
+        return lastID;
+    }
+
 }
