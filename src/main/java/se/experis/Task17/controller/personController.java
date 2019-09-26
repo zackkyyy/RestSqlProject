@@ -62,11 +62,9 @@ public class personController {
 
     @PostMapping("/addPerson")
     public Person createPerson(@RequestBody Person person) {
-        return Task17Application.addPerson(person);
+        DbHandler dbHandler = new DbHandler();
+        return dbHandler.addPerson(person);
     }
-    //public void personPost(@PathVariable  String name , String lastname ){
-    //
-    //}
 
     public Person findPersonByID(int id ){
         Person person = null ;
