@@ -163,9 +163,9 @@ public class DbHandler {
 
 
 
-    public  Person addPerson(Person person , Address adress) {
+    public  Person addPerson(Person person , Address adress, Email email , PhoneNumber phones) throws SQLException {
         Connection conn = null;
-        try {
+
             conn = this.connect();
             Statement stmt = conn.createStatement();
             String insertSql = "INSERT INTO Address(Street, City, PostalCode, Country) VALUES(?,?,?,?)";
@@ -176,51 +176,70 @@ public class DbHandler {
             pstmt.setString(4, adress.getCountry());
             pstmt.execute();
 
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } finally {
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-            }
-        }
-
-        int tempAddressId = 0;
-        try {
-            tempAddressId = getLastIdFromAddress();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        String sql = "INSERT INTO Person(FirstName, LastName, DateOfBirth, AddressID) VALUES(?,?,?,?)";
-        try {
+            int tempAddressId = getLastIDAdded("address");
+            String sql = "INSERT INTO Person(FirstName, LastName, DateOfBirth, AddressID) VALUES(?,?,?,?)";
             conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, person.getFirstName());
-            pstmt.setString(2, person.getLastName());
-            pstmt.setString(3, person.getBirthDate());
-            pstmt.setInt(4, tempAddressId);
-            pstmt.execute();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+            PreparedStatement pstmt1 = conn.prepareStatement(sql);
+            pstmt1.setString(1, person.getFirstName());
+            pstmt1.setString(2, person.getLastName());
+            pstmt1.setString(3, person.getBirthDate());
+            pstmt1.setInt(4, tempAddressId);
+            pstmt1.execute();
+            person.setAddressID(tempAddressId);
 
+
+            int thisPerosnID= getLastIDAdded("person");
+            createEmail(email.getWorkEmail() , email.getPersonalEmail(), thisPerosnID);
+            createPhoneNumbers(phones.getWorkNumber() , phones.getPersonalNumber() , thisPerosnID);
         return person;
     }
 
-    public int getLastIdFromAddress() throws SQLException {
-        String sql = "SELECT ID FROM Address";
+    public void createEmail(String work, String personal, int id) throws SQLException {
+        Connection con = connect();
+        String insertSql = "INSERT INTO Email(Work, Personal, PersonID ) VALUES(?,?,?)";
+        PreparedStatement pstmt = con.prepareStatement(insertSql);
+        pstmt.setString(1, work);
+        pstmt.setString(2, personal);
+        pstmt.setInt(3, id);
+        pstmt.execute();
+        System.out.println("Email Created");
+    }
+
+    /**
+     * This method takes the phone numbers provided by the user input and create a row in the PhoneNumbers table
+     * in the database and associate it with the corresponding person that the numbers belong to
+     *
+     * @param work     String provided by the user
+     * @param personal String provided by the user
+     * @throws SQLException
+     */
+    public void createPhoneNumbers(String work, String personal, int id ) throws SQLException {
+        Connection con = connect();
+        String insertSql = "INSERT INTO Email( Work, Personal , PersonID ) VALUES(?,?,?)";
+        PreparedStatement pstmt = con.prepareStatement(insertSql);
+        pstmt.setString(1, work);
+        pstmt.setString(2, personal);
+        pstmt.setInt(3, id);
+        pstmt.execute();
+        System.out.println("Contact information Created");
+    }
+
+    public int getLastIDAdded(String str) throws SQLException {
+
+        String sql = (str.equals("address")) ? "SELECT ID FROM Address" : "SELECT ID FROM Person";
+
         int lastID = 0;
+        ArrayList<Integer> arr = new ArrayList<>();
         Connection conn = null;
         try {
             conn = this.connect();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-            while (!rs.next()) {
-                lastID = rs.getInt("ID");
+            while (rs.next()) {
+                arr = new ArrayList<Integer>();
+                arr.add(rs.getInt("ID"));
             }
+            lastID = arr.get(arr.size()-1);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } finally {
@@ -235,5 +254,4 @@ public class DbHandler {
         }
         return lastID;
     }
-
 }

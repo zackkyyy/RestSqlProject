@@ -14,6 +14,11 @@ public class Email {
         this.personalEmail = personalEmail;
     }
 
+    public Email(String workEmail, String personalEmail) {
+        this.workEmail = workEmail;
+        this.personalEmail = personalEmail;
+    }
+
     public int getEmailID() {
         return emailID;
     }

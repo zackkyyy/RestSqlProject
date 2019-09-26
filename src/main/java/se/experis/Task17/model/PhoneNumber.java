@@ -15,8 +15,12 @@ String personalNumber;
     public PhoneNumber(int phoneID, int personID, String workNumber, String personalNumber) {
         this.phoneID = phoneID;
         this.personID = personID;
-        this.workNumber = workNumber;
-        this.personalNumber = personalNumber;
+
+    }
+
+    public PhoneNumber(String phoneWork, String phonePersonal) {
+        this.workNumber = phoneWork;
+        this.personalNumber = phonePersonal;
     }
 
     public int getPhoneID() {

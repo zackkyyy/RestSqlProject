@@ -3,12 +3,8 @@ package se.experis.Task17;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import se.experis.Task17.controller.DbHandler;
-import se.experis.Task17.model.Address;
-import se.experis.Task17.model.Email;
 import se.experis.Task17.model.Person;
 import se.experis.Task17.model.PhoneNumber;
-
-import java.sql.*;
 import java.util.ArrayList;
 
 @SpringBootApplication
