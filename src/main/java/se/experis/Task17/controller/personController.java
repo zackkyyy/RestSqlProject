@@ -62,6 +62,7 @@ public class personController {
 
     @PostMapping("/addPerson")
     public Person createPerson(@RequestBody Person person) {
+        System.out.println("here");
         DbHandler dbHandler = new DbHandler();
         return dbHandler.addPerson(person);
     }
