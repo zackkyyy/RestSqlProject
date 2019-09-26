@@ -5,17 +5,36 @@
     <title>Delete Person</title>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Task17</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/person">View People</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/person/name">Search by name</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/person/id">Search by ID</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/person/number">Search by number</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/person/delete">Delete by ID<span class="sr-only"></span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/create">Create Person</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<br><br><br>
 <h1>THIS IS THE DELETE PAGE</h1>
-
-<form action="/deleting" METHOD="post">
-<p>Search by using a name or last name ? </p>
-    <input type="text"  name="searchField" > </br>
-
-    <input type="submit" value="Submit">
-</form>
-
-
-</p>
 </body>
 </html>
