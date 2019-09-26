@@ -3,24 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <link href="index.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <title>Title</title>
 </head>
 <body>
-  <h1>Task 17 Experis Academy  </h1>
-  <h2>Spring boot web application that handles transaction with SQL database</h2>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Task17</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-  </br>
-    <p>You can do the following things</p>
-   <ol>
-       <li>You can view all people in the database by pressing <a href="/person"> Here </a></li>
-       <li>you can search a person by name or last name by pressing <a href="/person/name/billy">here</a></li>
-       <li>you can search a person by ID by pressing <a href="/person/id/1">here</a></li>
-       <li>you can search a person by phone number by pressing <a href="/person/number/23456">here</a></li>
-       <li>you can delete a person by id  by pressing <a href="/person/delete/id">here</a></li>
-       <li>you can create a person by pressing <a href="/create">here</a></li>
-
-
-
-   </ol>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/person">View People</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/person/name/milk">Search by name</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/person/id/1">Search by ID</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/person/number/23456">Search by number</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/person/delete">Delete Person</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/create">Create Person</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<br><br><br>
+<h1>Task 17 Experis Academy  </h1>
+<br>
+<h3>Spring boot web application that handles transaction with SQL database</h3>
 </body>
 </html>

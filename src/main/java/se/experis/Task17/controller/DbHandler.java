@@ -19,6 +19,8 @@ public class DbHandler {
     private  String databaseURL = "jdbc:sqlite::resource:task17DB.db";
     private  Connection conn = null ;
     public   ArrayList<Person> people = new ArrayList<Person>();
+
+
     public  Connection connect() {
         Connection conn = null;
         try {
@@ -28,16 +30,69 @@ public class DbHandler {
         }
         return conn;
     }
+//
+//    public void createTables(){
+//        final String sqlPersonTable = ""
+//                + "CREATE TABLE IF NOT EXISTS Person "
+//                + "(PersonID INTEGER PRIMARY KEY AUTOINCREMENT, "
+//                + "FirstName TEXT NOT NULL, "
+//                + "LastName TEXT NOT NULL, "
+//                + "FOREIGN KEY (AddressID) REFERENCES Address(ID) "
+//                + "DateOfBirth TEXT NOT NULL);";
+//
+//        final String sqlEmailTable = ""
+//                + "CREATE TABLE IF NOT EXISTS Email "
+//                + "(PersonID INTEGER NOT NULL UNIQUE, "
+//                + "Work TEXT, "
+//                + "Personal TEXT, "
+//                + "FOREIGN KEY (PersonID) REFERENCES Person(PersonID));";
+//
+//        final String sqlContactTable = ""
+//                + "CREATE TABLE IF NOT EXISTS Phonenumber ( "
+//                + "PersonID INTEGER NOT NULL UNIQUE, "
+//                + "Personal TEXT, "
+//                + "Work TEXT, "
+//                + "FOREIGN KEY (PersonID) REFERENCES Person(PersonID));";
+//
+//        final String sqlAddressTable = ""
+//                + "CREATE TABLE IF NOT EXISTS Address ("
+//                + "ID INTEGER PRIMARY KEY AUTOINCREMENT, "
+//                + "Street TEXT, "
+//                + "PostalCode TEXT, "
+//                + "City TEXT, "
+//                + "Country TEXT);";
+//
+//        final String sqlRelationTable = "" +
+//                "CREATE TABLE IF NOT EXISTS Relationship (" +
+//                "PersonID INTEGER NOT NULL, " +
+//                "Person2ID INTEGER NOT NULL, " +
+//                "ID INTEGER NOT NULL, " +
+//                "RelationshipType TEXT NOT NULL, " +
+//                "PRIMARY KEY (personID, ID));";
+//
+//        try {
+//           // Connection conn = getConn();
+//            Statement stmt  = conn.createStatement();
+//            stmt.addBatch(sqlPersonTable);
+//            stmt.addBatch(sqlEmailTable);
+//            stmt.addBatch(sqlContactTable);
+//            stmt.addBatch(sqlAddressTable);
+//            stmt.addBatch(sqlRelationTable);
+//            stmt.executeBatch();
+//        } catch (SQLException e) {
+//        }
+//    }
 
-    public  ArrayList<PhoneNumber> getPersonsPhoneNumbers(int id ){
+
+    public  PhoneNumber getPersonsPhoneNumbers(int id ){
         ArrayList<PhoneNumber> phones = getAllPhoneNumbers();
-        ArrayList<PhoneNumber> returnedList = new ArrayList<>();
+        PhoneNumber returnedPhone = new PhoneNumber();
         for (PhoneNumber phNr : phones){
             if(phNr.getPersonID() == id){
-                returnedList.add(phNr);
+                returnedPhone = phNr;
             }
         }
-        return returnedList;
+        return returnedPhone;
     }
 
     public  Address getPersonsAddresses(int id ){
@@ -51,16 +106,22 @@ public class DbHandler {
         return returnedAddress;
     }
 
-    public  ArrayList<Email> getPersonsEmails(int id ){
+    /**
+     *
+     * @param id
+     * @return
+     */
+    public  Email getPersonsEmails(int id ){
         ArrayList<Email> emails = getALLEmails();
+        Email returnedEmail = null;
         ArrayList<Email> returnedList = new ArrayList<>();
         for (Email email : emails){
 
             if(email.getPersonID() == id){
-                returnedList.add(email);
+                    returnedEmail = email;
             }
         }
-        return returnedList;
+        return returnedEmail;
     }
     public  ArrayList<Person> getAllPersons() {
         String sql = "SELECT ID, FirstName, LastName , DateOfBirth , AddressID FROM Person";
@@ -81,23 +142,19 @@ public class DbHandler {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    System.out.println(e.getMessage());
-                    ;
-                }
-            }
         }
         return people;
     }
 
+    /**
+     * Method returns all Phone numbers in the database
+     *
+     * @return array list contains the numbers
+     */
 
     public  ArrayList<PhoneNumber> getAllPhoneNumbers(){
         ArrayList<PhoneNumber> phones = new ArrayList<>();
-        String sql = "SELECT ID , Personal , Work  , PersonID FROM Phonenumber";
+        String sql = "SELECT * FROM Phonenumber";
         try {
             conn = connect();
             Statement stmt = conn.createStatement();
@@ -116,9 +173,14 @@ public class DbHandler {
         }
         return phones;
     }
+
+    /**
+     *
+     * @return
+     */
     public  ArrayList<Address> getALLAddress(){
         ArrayList<Address> addresses = new ArrayList<>();
-        String sql = "SELECT ID , Street , City  , PostalCode, Country FROM Address";
+        String sql = "SELECT * FROM Address";
         try {
             conn = connect();
             Statement stmt = conn.createStatement();
@@ -138,9 +200,14 @@ public class DbHandler {
         }
         return addresses;
     }
+
+    /**
+     *
+     * @return
+     */
     public  ArrayList<Email> getALLEmails(){
         ArrayList<Email> emails = new ArrayList<>();
-        String sql = "SELECT ID , Personal , Work  , PersonID FROM Email";
+        String sql = "SELECT * FROM Email";
         try {
             conn = connect();
             Statement stmt = conn.createStatement();
@@ -233,28 +300,41 @@ public class DbHandler {
     }
 
     public Person deletePerson(Person p) throws SQLException {
-        conn = null;
-        conn = connect();
-        String sqlPhone = "DELETE FROM Phonenumber WHERE PersonID =? ";
-        PreparedStatement pstmt1 = conn.prepareStatement(sqlPhone);
-        pstmt1.setInt(1, p.getPersonID());
-        pstmt1.execute();
-        String sqlEmail = "DELETE FROM Email WHERE PersonID =? ";
-        PreparedStatement pstmt2 = conn.prepareStatement(sqlEmail);
-        pstmt2.setInt(1, p.getPersonID());
-        pstmt2.execute();
-        String sqlAddressCheck = "SELECT COUNT (AddressID) FROM Person WHERE AddressID =? ";
-        PreparedStatement pstmt3 = conn.prepareStatement(sqlAddressCheck);
-        pstmt3.setInt(1, p.getAddressID());
-        ResultSet rs = pstmt3.executeQuery(sqlAddressCheck);
-        rs.last();
-        if(rs.getRow() == 1){
-            String sqlAddressDel = "DELETE FROM Address WHERE ID =?";
-            PreparedStatement pstmt4 = conn.prepareStatement(sqlAddressCheck);
-            pstmt4.setInt(1, p.getAddressID());
-            pstmt4.execute();
+
+        System.out.println(p.toString());
+        Address address = getPersonsAddresses(p.getPersonID());
+        System.out.println(address.toString());
+        int addressID = address.getID();
+        String sql1 = "DELETE FROM Person WHERE ID = ?; ";
+        String sql2 = "DELETE FROM Email WHERE PersonID = ?; ";
+        String sql3 = "DELETE FROM Address WHERE ID = ?; ";
+        String sql4 = "DELETE FROM Phonenumber WHERE PersonID = ?; ";
+        String sql5 = "DELETE FROM Relationship WHERE PersonID =?; ";
+        Connection connect = connect();
+        try{
+            connect.setAutoCommit(false);
+            PreparedStatement pstmt = connect.prepareStatement(sql1);
+            PreparedStatement pstmt2 = connect.prepareStatement(sql2);
+            PreparedStatement pstmt3 = connect.prepareStatement(sql3);
+            PreparedStatement pstmt4 = connect.prepareStatement(sql4);
+            PreparedStatement pstmt5 = connect.prepareStatement(sql5);
+
+            pstmt.setInt(1, p.getPersonID());
+            pstmt2.setInt(1, p.getPersonID());
+            pstmt3.setInt(1, addressID);
+            pstmt4.setInt(1, p.getPersonID());
+            pstmt5.setInt(1, p.getPersonID());
+            pstmt.executeUpdate();
+            pstmt2.executeUpdate();
+            pstmt3.executeUpdate();
+            pstmt4.executeUpdate();
+            pstmt5.executeUpdate();
+            connect.commit();
+            System.err.println("Person is deleted");
         }
-        rs.close();
+        catch (SQLException r){
+            System.out.println(r.getMessage());
+        }
         return p;
     }
 
