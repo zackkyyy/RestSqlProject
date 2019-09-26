@@ -19,11 +19,8 @@ import java.util.ArrayList;
 
 @RestController("/person")
 public class personController {
-    @GetMapping("/person")
-    public ArrayList<Person> PersonGetALL(Model model ){
+    DbHandler dbHandler = new DbHandler();
 
-        return Task17Application.people;
-    }
 
     @GetMapping("/person/number/{phoneNumber}")
     public Person personGet(@PathVariable String phoneNumber){
@@ -54,10 +51,10 @@ public class personController {
         System.out.println("Trying to find person: " + name);
         Person returnPerson = null;
         for (Person person : Task17Application.people) {
-            if (person.getName().toLowerCase().contains(name.toLowerCase())) {
-                System.out.println(" --- PERSON FOUND --- ");
-                returnPerson = person;
-            }
+                if (person.getName().toLowerCase().contains(name.toLowerCase())) {
+                    System.out.println(" --- PERSON FOUND --- ");
+                    returnPerson = person;
+                }
         }
         if(returnPerson == null)
             System.out.println(" --- PERSON WAS NOT FOUND --- ");
@@ -116,6 +113,27 @@ public class personController {
         DbHandler dbHandler = new DbHandler();
         return dbHandler.addPerson(person, address , email , phoneNumber);
     }
+
+    @RequestMapping(method = RequestMethod.POST
+            , consumes = {"application/x-www-form-urlencoded"}
+            ,value = "/deleting"
+    )
+    public
+    @ResponseBody
+    Person deletePerson(@RequestBody MultiValueMap params) throws Exception {
+        System.out.println("params are " + params);
+        String searchWord = params.get("searchField").toString();
+        searchWord = searchWord.substring(1,searchWord.length()-1);
+
+        Person returnPerson = null;
+        for (Person person : Task17Application.people) {
+            if(person.getName().contains(searchWord)){
+                returnPerson = person;
+            }
+        }
+        return dbHandler.deletePerson(returnPerson);
+    }
+
 
 
 

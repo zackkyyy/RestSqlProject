@@ -18,7 +18,6 @@ public class DbHandler {
     private  String databaseURL = "jdbc:sqlite::resource:task17DB.db";
     private  Connection conn = null ;
     public   ArrayList<Person> people = new ArrayList<Person>();
-    public   ArrayList<PhoneNumber> phoneNumbers = new ArrayList<PhoneNumber>();
     public  Connection connect() {
         Connection conn = null;
         try {
@@ -230,6 +229,32 @@ public class DbHandler {
         pstmt1.setInt(3, id);
         pstmt1.execute();
         System.out.println("Contact information Created");
+    }
+
+    public Person deletePerson(Person p) throws SQLException {
+        conn = null;
+        conn = connect();
+        String sqlPhone = "DELETE FROM Phonenumber WHERE PersonID =? ";
+        PreparedStatement pstmt1 = conn.prepareStatement(sqlPhone);
+        pstmt1.setInt(1, p.getPersonID());
+        pstmt1.execute();
+        String sqlEmail = "DELETE FROM Email WHERE PersonID =? ";
+        PreparedStatement pstmt2 = conn.prepareStatement(sqlEmail);
+        pstmt2.setInt(1, p.getPersonID());
+        pstmt2.execute();
+        String sqlAddressCheck = "SELECT COUNT (AddressID) FROM Person WHERE AddressID =? ";
+        PreparedStatement pstmt3 = conn.prepareStatement(sqlAddressCheck);
+        pstmt3.setInt(1, p.getAddressID());
+        ResultSet rs = pstmt3.executeQuery(sqlAddressCheck);
+        rs.last();
+        if(rs.getRow() == 1){
+            String sqlAddressDel = "DELETE FROM Address WHERE ID =?";
+            PreparedStatement pstmt4 = conn.prepareStatement(sqlAddressCheck);
+            pstmt4.setInt(1, p.getAddressID());
+            pstmt4.execute();
+        }
+        rs.close();
+        return p;
     }
 
     public int getLastIDAdded(String str) throws SQLException {

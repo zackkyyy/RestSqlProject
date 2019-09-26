@@ -9,6 +9,7 @@ import se.experis.Task17.model.Email;
 import se.experis.Task17.model.Person;
 import se.experis.Task17.model.PhoneNumber;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -23,18 +24,32 @@ public class RoutesController {
     public String createPerson(){
         return "addPerson";
     }
-    @GetMapping("/delete/{id}")
-    public String deletePerson(@PathVariable int id , Model model) {
-        Person returnPerson = null;
-        for (Person person : Task17Application.people) {
-            if (person.getPersonID() == id) {
-                System.out.println(" --- PERSON FOUND --- ");
-                returnPerson = person;
-            }
-        }
-        model.addAttribute("person" , returnPerson);
+
+    @GetMapping("/delete")
+    public String deletePerson(){
         return "delete";
     }
+
+    @GetMapping("/person")
+    public String PersonGetALL(Model model){
+        ArrayList<Person> arr = Task17Application.people;
+        model.addAttribute("people" , arr);
+        return "peoplePage";
+    }
+
+
+//    @GetMapping("/delete/{id}")
+//    public String deletePerson(@PathVariable int id , Model model) {
+//        Person returnPerson = null;
+//        for (Person person : Task17Application.people) {
+//            if (person.getPersonID() == id) {
+//                System.out.println(" --- PERSON FOUND --- ");
+//                returnPerson = person;
+//            }
+//        }
+//        model.addAttribute("person" , returnPerson);
+//        return "delete";
+//    }
 
     @GetMapping("/update/{ID}")
     public String updatePerson(@PathVariable int ID, Model model){

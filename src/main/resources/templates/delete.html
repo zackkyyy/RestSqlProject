@@ -5,8 +5,17 @@
     <title>Delete Person</title>
 </head>
 <body>
-<p th:text="'Person: ' + ${person.firstName}" />
-<input type="text" th:value = "${person.firstName}"   >
+
 <h1>THIS IS THE DELETE PAGE</h1>
+
+<form action="/deleting" METHOD="post">
+<p>Search by using a name or last name ? </p>
+    <input type="text"  name="searchField" > </br>
+
+    <input type="submit" value="Submit">
+</form>
+
+
+</p>
 </body>
 </html>
