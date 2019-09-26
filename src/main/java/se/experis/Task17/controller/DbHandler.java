@@ -1,27 +1,17 @@
 package se.experis.Task17.controller;
 
-import se.experis.Task17.model.Address;
-import se.experis.Task17.model.Email;
-import se.experis.Task17.model.Person;
-import se.experis.Task17.model.PhoneNumber;
+import se.experis.Task17.model.*;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 
-/**
- * Author : Zacky Kharboutli
- * Date : 2019-09-26
- * Project: Task17
- */
 
 public class DbHandler {
-    private  String databaseURL = "jdbc:sqlite::resource:task17DB.db";
-    private  Connection conn = null ;
-    public   ArrayList<Person> people = new ArrayList<Person>();
+    public ArrayList<Person> people = new ArrayList<Person>();
+    private String databaseURL = "jdbc:sqlite::resource:task17DB.db";
+    private Connection conn = null;
 
-
-    public  Connection connect() {
+    public Connection connect() {
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(databaseURL);
@@ -83,23 +73,34 @@ public class DbHandler {
 //        }
 //    }
 
-
-    public  PhoneNumber getPersonsPhoneNumbers(int id ){
+    /**
+     * retunrs the phone row from phones table associated to one person
+     *
+     * @param id the person id
+     * @return phoneNumber object that represent the row in the database
+     */
+    public PhoneNumber getPersonsPhoneNumbers(int id) {
         ArrayList<PhoneNumber> phones = getAllPhoneNumbers();
         PhoneNumber returnedPhone = new PhoneNumber();
-        for (PhoneNumber phNr : phones){
-            if(phNr.getPersonID() == id){
+        for (PhoneNumber phNr : phones) {
+            if (phNr.getPersonID() == id) {
                 returnedPhone = phNr;
             }
         }
         return returnedPhone;
     }
 
-    public  Address getPersonsAddresses(int id ){
+    /**
+     * retunrs the address row associated to one person
+     *
+     * @param id the person id
+     * @return Address object that represent the row in the database
+     */
+    public Address getPersonsAddresses(int id) {
         ArrayList<Address> addresses = getALLAddress();
         Address returnedAddress = null;
-        for (Address address : addresses){
-            if(address.getID() == id){
+        for (Address address : addresses) {
+            if (address.getID() == id) {
                 returnedAddress = address;
             }
         }
@@ -107,23 +108,30 @@ public class DbHandler {
     }
 
     /**
+     * retunrs the email row associated to one person
      *
-     * @param id
-     * @return
+     * @param id the person id
+     * @return Email object that represent the row in the database
      */
-    public  Email getPersonsEmails(int id ){
+    public Email getPersonsEmails(int id) {
         ArrayList<Email> emails = getALLEmails();
         Email returnedEmail = null;
         ArrayList<Email> returnedList = new ArrayList<>();
-        for (Email email : emails){
+        for (Email email : emails) {
 
-            if(email.getPersonID() == id){
-                    returnedEmail = email;
+            if (email.getPersonID() == id) {
+                returnedEmail = email;
             }
         }
         return returnedEmail;
     }
-    public  ArrayList<Person> getAllPersons() {
+
+    /**
+     * Method returns list of all people in the database
+     *
+     * @return Arraylist of all people
+     */
+    public ArrayList<Person> getAllPersons() {
         String sql = "SELECT ID, FirstName, LastName , DateOfBirth , AddressID FROM Person";
         try {
             conn = connect();
@@ -134,7 +142,7 @@ public class DbHandler {
                 String name = rs.getString("FirstName");
                 String LName = rs.getString("LastName");
                 String birthdate = rs.getString("DateOfBirth");
-                Person perosn = new Person(name, LName, birthdate , id, rs.getInt("AddressID"));
+                Person perosn = new Person(name, LName, birthdate, id, rs.getInt("AddressID"));
                 perosn.setPhoneNumber(getPersonsPhoneNumbers(id));
                 perosn.setEmails(getPersonsEmails(id));
                 perosn.setAddress(getPersonsAddresses(rs.getInt("AddressID")));
@@ -152,7 +160,7 @@ public class DbHandler {
      * @return array list contains the numbers
      */
 
-    public  ArrayList<PhoneNumber> getAllPhoneNumbers(){
+    public ArrayList<PhoneNumber> getAllPhoneNumbers() {
         ArrayList<PhoneNumber> phones = new ArrayList<>();
         String sql = "SELECT * FROM Phonenumber";
         try {
@@ -164,7 +172,7 @@ public class DbHandler {
                 String workNr = rs.getString("Work");
                 String personalNr = rs.getString("Personal");
                 int personID = rs.getInt("PersonID");
-                PhoneNumber phoneNumber = new PhoneNumber(id , personID, workNr , personalNr);
+                PhoneNumber phoneNumber = new PhoneNumber(id, personID, workNr, personalNr);
                 phones.add(phoneNumber);
 
             }
@@ -175,10 +183,11 @@ public class DbHandler {
     }
 
     /**
+     * return all addresses saved in the database
      *
-     * @return
+     * @return ArrayList of addresses
      */
-    public  ArrayList<Address> getALLAddress(){
+    public ArrayList<Address> getALLAddress() {
         ArrayList<Address> addresses = new ArrayList<>();
         String sql = "SELECT * FROM Address";
         try {
@@ -191,7 +200,7 @@ public class DbHandler {
                 String city = rs.getString("City");
                 String postalCode = rs.getString("PostalCode");
                 String country = rs.getString("Country");
-                Address address = new Address(id,street, city ,country,postalCode);
+                Address address = new Address(id, street, city, country, postalCode);
                 addresses.add(address);
 
             }
@@ -202,10 +211,11 @@ public class DbHandler {
     }
 
     /**
+     * returns array list of all emails in the database
      *
-     * @return
+     * @return list of emails
      */
-    public  ArrayList<Email> getALLEmails(){
+    public ArrayList<Email> getALLEmails() {
         ArrayList<Email> emails = new ArrayList<>();
         String sql = "SELECT * FROM Email";
         try {
@@ -217,7 +227,7 @@ public class DbHandler {
                 String workEm = rs.getString("Work");
                 String personalEm = rs.getString("Personal");
                 int personID = rs.getInt("PersonID");
-                Email email = new Email(id , personID, workEm , personalEm);
+                Email email = new Email(id, personID, workEm, personalEm);
                 emails.add(email);
 
             }
@@ -228,26 +238,31 @@ public class DbHandler {
     }
 
 
-
-    public  Person addPerson(Person person , Address address, Email email , PhoneNumber phones) throws SQLException {
-
-            int tempAddressId = getLastIDAdded("address");
-            String sql = "INSERT INTO Person(FirstName, LastName, DateOfBirth, AddressID) VALUES(?,?,?,?)";
-            conn = connect();
-            createAddress(address);
-            PreparedStatement pstmt1 = conn.prepareStatement(sql);
-            pstmt1.setString(1, person.getFirstName());
-            pstmt1.setString(2, person.getLastName());
-            pstmt1.setString(3, person.getBirthDate());
-            pstmt1.setInt(4, tempAddressId);
-            pstmt1.execute();
-            person.setAddressID(tempAddressId);
-            int thisPersonID= getLastIDAdded("person");
-            createEmail(email.getWorkEmail() , email.getPersonalEmail(), thisPersonID);
-            createPhoneNumbers(phones.getWorkNumber() , phones.getPersonalNumber() , thisPersonID);
-        return getAllPersons().get(getAllPersons().size()-1);
+    public Person addPerson(Person person, Address address, Email email, PhoneNumber phones) throws SQLException {
+        int tempAddressId = getLastIDAdded("address");
+        String sql = "INSERT INTO Person(FirstName, LastName, DateOfBirth, AddressID) VALUES(?,?,?,?)";
+        conn = connect();
+        createAddress(address);
+        PreparedStatement pstmt1 = conn.prepareStatement(sql);
+        pstmt1.setString(1, person.getFirstName());
+        pstmt1.setString(2, person.getLastName());
+        pstmt1.setString(3, person.getBirthDate());
+        pstmt1.setInt(4, tempAddressId);
+        pstmt1.execute();
+        person.setAddressID(tempAddressId);
+        int thisPersonID = getLastIDAdded("person");
+        createEmail(email.getWorkEmail(), email.getPersonalEmail(), thisPersonID);
+        createPhoneNumbers(phones.getWorkNumber(), phones.getPersonalNumber(), thisPersonID);
+        return getAllPersons().get(getAllPersons().size() - 1);
     }
 
+    /**
+     * This method takes the address provided by the user input and create a row in the Address
+     * table in the database and associate it with the corresponding person that lives in the address
+     *
+     * @param address from user inputs
+     * @throws SQLException
+     */
     public void createAddress(Address address) throws SQLException {
         conn = this.connect();
         Statement stmt = conn.createStatement();
@@ -259,6 +274,7 @@ public class DbHandler {
         pstmt.setString(4, address.getCountry());
         pstmt.execute();
     }
+
     /**
      * This method takes the emails provided by the user input and create a row in the Email
      * table in the database and associate it with the corresponding person that the email belongs to
@@ -286,7 +302,7 @@ public class DbHandler {
      * @param personal String provided by the user
      * @throws SQLException
      */
-    public void createPhoneNumbers(String work, String personal, int id ) throws SQLException {
+    public void createPhoneNumbers(String work, String personal, int id) throws SQLException {
         Connection con = connect();
         System.out.println(work);
         System.out.println(personal);
@@ -299,7 +315,13 @@ public class DbHandler {
         System.out.println("Contact information Created");
     }
 
-    public Person deletePerson(Person p) throws SQLException {
+    /**
+     * Method that deletes a person and all his information from all tables in the DB
+     *
+     * @param p the person to be deleted
+     * @throws SQLException
+     */
+    public void deletePerson(Person p) throws SQLException {
 
         System.out.println(p.toString());
         Address address = getPersonsAddresses(p.getPersonID());
@@ -311,7 +333,7 @@ public class DbHandler {
         String sql4 = "DELETE FROM Phonenumber WHERE PersonID = ?; ";
         String sql5 = "DELETE FROM Relationship WHERE PersonID =?; ";
         Connection connect = connect();
-        try{
+        try {
             connect.setAutoCommit(false);
             PreparedStatement pstmt = connect.prepareStatement(sql1);
             PreparedStatement pstmt2 = connect.prepareStatement(sql2);
@@ -331,13 +353,18 @@ public class DbHandler {
             pstmt5.executeUpdate();
             connect.commit();
             System.err.println("Person is deleted");
-        }
-        catch (SQLException r){
+        } catch (SQLException r) {
             System.out.println(r.getMessage());
         }
-        return p;
     }
 
+    /**
+     * Method returns last ID added to the table
+     *
+     * @param str represent the name of the table
+     * @return Integer represent the last ID
+     * @throws SQLException
+     */
     public int getLastIDAdded(String str) throws SQLException {
 
         String sql = (str.equals("address")) ? "SELECT ID FROM Address" : "SELECT ID FROM Person";
@@ -353,7 +380,7 @@ public class DbHandler {
                 arr = new ArrayList<Integer>();
                 arr.add(rs.getInt("ID"));
             }
-            lastID = arr.get(arr.size()-1);
+            lastID = arr.get(arr.size() - 1);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } finally {
@@ -369,46 +396,59 @@ public class DbHandler {
         return lastID;
     }
 
-    public Person updatePerson(Person person , Address address, Email email, PhoneNumber phoneNumber) throws SQLException {
-        String sql = "SELECT ID, AddressID FROM Person WHERE DateOfBirth = '" + person.getBirthDate()+"'";
+    /**
+     * This method is called to update information in the database
+     *
+     * @return the updated version in JSON object form
+     * @throws SQLException
+     */
+    public Person updatePerson(Person person, Address address, Email email, PhoneNumber phoneNumber) throws SQLException {
         //Logically speaking the DOB should not be changeable. Yes we assume it is correct from start!
+
+        String sql = "SELECT ID, AddressID FROM Person WHERE DateOfBirth = '" + person.getBirthDate() + "'";
+        String sql1 = "UPDATE Person SET FirstName=?, LastName=? WHERE ID=?";
+        String sql2 = "UPDATE Email SET Personal = ?, Work = ? WHERE PersonID = ?";
+        String sql3 = "UPDATE Phonenumber SET Personal = ?, Work = ? WHERE PersonID = ?";
+        String sql4 = "UPDATE Address SET Street = ?, PostalCode = ?, City = ?, Country = ? WHERE ID = ?";
+
         conn = connect();
+
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
         int personID = rs.getInt("ID");
-        System.out.println("id done" + personID);
         int addressID = rs.getInt("AddressID");
-        System.out.println("addressID done" + addressID);
-        String query = "UPDATE Person SET FirstName=?, LastName=? WHERE ID=?";
-        PreparedStatement pstmt1 = conn.prepareStatement(query);
+
+        // update personal information
+        PreparedStatement pstmt1 = conn.prepareStatement(sql1);
         pstmt1.setString(1, person.getFirstName());
         pstmt1.setString(2, person.getLastName());
         pstmt1.setInt(3, personID);
         pstmt1.execute();
-        System.out.println("was here");
-        String query1 = "UPDATE Email SET Personal = ?, Work = ? WHERE PersonID = ?";
-        PreparedStatement pstmt2 = conn.prepareStatement(query1);
+
+        //update the email addresses
+        PreparedStatement pstmt2 = conn.prepareStatement(sql2);
         pstmt2.setString(1, email.getPersonalEmail());
         pstmt2.setString(2, email.getWorkEmail());
         pstmt2.setInt(3, personID);
         pstmt2.execute();
-        String query3 = "UPDATE Phonenumber SET Personal = ?, Work = ? WHERE PersonID = ?";
-        PreparedStatement pstmt4 = conn.prepareStatement(query3);
+
+        //update the phone numbers
+        PreparedStatement pstmt4 = conn.prepareStatement(sql3);
         pstmt4.setString(1, phoneNumber.getPersonalNumber());
         pstmt4.setString(2, phoneNumber.getWorkNumber());
         pstmt4.setInt(3, personID);
         pstmt4.execute();
-        System.out.println("now here");
-        String query4 = "UPDATE Address SET Street = ?, PostalCode = ?, City = ?, Country = ? WHERE ID = ?";
-        PreparedStatement pstmt5 = conn.prepareStatement(query4);
+
+        // update the address
+        PreparedStatement pstmt5 = conn.prepareStatement(sql4);
         pstmt5.setString(1, address.getStreet());
         pstmt5.setString(2, address.getPostalCode());
         pstmt5.setString(3, address.getCity());
         pstmt5.setString(4, address.getCountry());
         pstmt5.setInt(5, addressID);
         pstmt5.execute();
-        System.out.println("finally here");
 
-        return getAllPersons().get(personID-1); //cause array
+
+        return getAllPersons().get(personID - 1); //cause array
     }
 }
