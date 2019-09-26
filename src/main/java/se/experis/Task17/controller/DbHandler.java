@@ -53,7 +53,6 @@ public class DbHandler {
 
     public  ArrayList<Email> getPersonsEmails(int id ){
         ArrayList<Email> emails = getALLEmails();
-        System.out.println(emails);
         ArrayList<Email> returnedList = new ArrayList<>();
         for (Email email : emails){
 
@@ -163,22 +162,12 @@ public class DbHandler {
 
 
 
-    public  Person addPerson(Person person , Address adress, Email email , PhoneNumber phones) throws SQLException {
-        Connection conn = null;
-
-            conn = this.connect();
-            Statement stmt = conn.createStatement();
-            String insertSql = "INSERT INTO Address(Street, City, PostalCode, Country) VALUES(?,?,?,?)";
-            PreparedStatement pstmt = conn.prepareStatement(insertSql);
-            pstmt.setString(1, adress.getStreet());
-            pstmt.setString(2, adress.getCity());
-            pstmt.setString(3, adress.getPostalCode());
-            pstmt.setString(4, adress.getCountry());
-            pstmt.execute();
+    public  Person addPerson(Person person , Address address, Email email , PhoneNumber phones) throws SQLException {
 
             int tempAddressId = getLastIDAdded("address");
             String sql = "INSERT INTO Person(FirstName, LastName, DateOfBirth, AddressID) VALUES(?,?,?,?)";
             conn = connect();
+            createAddress(address);
             PreparedStatement pstmt1 = conn.prepareStatement(sql);
             pstmt1.setString(1, person.getFirstName());
             pstmt1.setString(2, person.getLastName());
@@ -186,14 +175,31 @@ public class DbHandler {
             pstmt1.setInt(4, tempAddressId);
             pstmt1.execute();
             person.setAddressID(tempAddressId);
-
-
-            int thisPerosnID= getLastIDAdded("person");
-            createEmail(email.getWorkEmail() , email.getPersonalEmail(), thisPerosnID);
-            createPhoneNumbers(phones.getWorkNumber() , phones.getPersonalNumber() , thisPerosnID);
-        return person;
+            int thisPersonID= getLastIDAdded("person");
+            createEmail(email.getWorkEmail() , email.getPersonalEmail(), thisPersonID);
+            createPhoneNumbers(phones.getWorkNumber() , phones.getPersonalNumber() , thisPersonID);
+        return getAllPersons().get(getAllPersons().size()-1);
     }
 
+    public void createAddress(Address address) throws SQLException {
+        conn = this.connect();
+        Statement stmt = conn.createStatement();
+        String insertSql = "INSERT INTO Address(Street, City, PostalCode, Country) VALUES(?,?,?,?)";
+        PreparedStatement pstmt = conn.prepareStatement(insertSql);
+        pstmt.setString(1, address.getStreet());
+        pstmt.setString(2, address.getCity());
+        pstmt.setString(3, address.getPostalCode());
+        pstmt.setString(4, address.getCountry());
+        pstmt.execute();
+    }
+    /**
+     * This method takes the emails provided by the user input and create a row in the Email
+     * table in the database and associate it with the corresponding person that the email belongs to
+     *
+     * @param work     String provided by the user
+     * @param personal String provided by the user
+     * @throws SQLException (to be handled late in the process)
+     */
     public void createEmail(String work, String personal, int id) throws SQLException {
         Connection con = connect();
         String insertSql = "INSERT INTO Email(Work, Personal, PersonID ) VALUES(?,?,?)";
@@ -215,12 +221,14 @@ public class DbHandler {
      */
     public void createPhoneNumbers(String work, String personal, int id ) throws SQLException {
         Connection con = connect();
-        String insertSql = "INSERT INTO Email( Work, Personal , PersonID ) VALUES(?,?,?)";
-        PreparedStatement pstmt = con.prepareStatement(insertSql);
-        pstmt.setString(1, work);
-        pstmt.setString(2, personal);
-        pstmt.setInt(3, id);
-        pstmt.execute();
+        System.out.println(work);
+        System.out.println(personal);
+        String insertSql = "INSERT INTO Phonenumber( Work, Personal , PersonID ) VALUES(?,?,?)";
+        PreparedStatement pstmt1 = con.prepareStatement(insertSql);
+        pstmt1.setString(1, work);
+        pstmt1.setString(2, personal);
+        pstmt1.setInt(3, id);
+        pstmt1.execute();
         System.out.println("Contact information Created");
     }
 

@@ -109,6 +109,8 @@ public class personController {
         phonePersonal = phonePersonal.substring(1 , phonePersonal.length()-1 );
         Email email = new Email(workEmail ,personalEmail);
         PhoneNumber phoneNumber = new PhoneNumber(phoneWork, phonePersonal);
+        System.out.println(phoneWork);
+        System.out.println(phonePersonal);
         Address address = new Address(street, city,country, postalCode);
         Person person = new Person(firstname, lastname , birthofdate );
         DbHandler dbHandler = new DbHandler();

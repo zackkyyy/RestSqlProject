@@ -13,6 +13,8 @@ String personalNumber;
     }
 
     public PhoneNumber(int phoneID, int personID, String workNumber, String personalNumber) {
+        this.personalNumber= personalNumber;
+        this.workNumber=workNumber;
         this.phoneID = phoneID;
         this.personID = personID;
 
