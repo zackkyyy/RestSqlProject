@@ -5,6 +5,7 @@ import se.experis.Task17.model.Email;
 import se.experis.Task17.model.Person;
 import se.experis.Task17.model.PhoneNumber;
 
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -366,5 +367,48 @@ public class DbHandler {
             }
         }
         return lastID;
+    }
+
+    public Person updatePerson(Person person , Address address, Email email, PhoneNumber phoneNumber) throws SQLException {
+        String sql = "SELECT ID, AddressID FROM Person WHERE DateOfBirth = '" + person.getBirthDate()+"'";
+        //Logically speaking the DOB should not be changeable. Yes we assume it is correct from start!
+        conn = connect();
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        int personID = rs.getInt("ID");
+        System.out.println("id done" + personID);
+        int addressID = rs.getInt("AddressID");
+        System.out.println("addressID done" + addressID);
+        String query = "UPDATE Person SET FirstName=?, LastName=? WHERE ID=?";
+        PreparedStatement pstmt1 = conn.prepareStatement(query);
+        pstmt1.setString(1, person.getFirstName());
+        pstmt1.setString(2, person.getLastName());
+        pstmt1.setInt(3, personID);
+        pstmt1.execute();
+        System.out.println("was here");
+        String query1 = "UPDATE Email SET Personal = ?, Work = ? WHERE PersonID = ?";
+        PreparedStatement pstmt2 = conn.prepareStatement(query1);
+        pstmt2.setString(1, email.getPersonalEmail());
+        pstmt2.setString(2, email.getWorkEmail());
+        pstmt2.setInt(3, personID);
+        pstmt2.execute();
+        String query3 = "UPDATE Phonenumber SET Personal = ?, Work = ? WHERE PersonID = ?";
+        PreparedStatement pstmt4 = conn.prepareStatement(query3);
+        pstmt4.setString(1, phoneNumber.getPersonalNumber());
+        pstmt4.setString(2, phoneNumber.getWorkNumber());
+        pstmt4.setInt(3, personID);
+        pstmt4.execute();
+        System.out.println("now here");
+        String query4 = "UPDATE Address SET Street = ?, PostalCode = ?, City = ?, Country = ? WHERE ID = ?";
+        PreparedStatement pstmt5 = conn.prepareStatement(query4);
+        pstmt5.setString(1, address.getStreet());
+        pstmt5.setString(2, address.getPostalCode());
+        pstmt5.setString(3, address.getCity());
+        pstmt5.setString(4, address.getCountry());
+        pstmt5.setInt(5, addressID);
+        pstmt5.execute();
+        System.out.println("finally here");
+
+        return getAllPersons().get(personID-1); //cause array
     }
 }
