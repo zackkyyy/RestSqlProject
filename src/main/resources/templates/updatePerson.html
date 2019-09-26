@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th = "http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/updatePerson" METHOD="put">
+    <fieldset>
+        <legend>Personal information:</legend>
+        First name:<br>
+        <input type="text" name="firstname" th:value = "${person.firstName}"><br>
+        Last name:<br>
+        <input type="text" name="lastname" th:value="${person.lastName}"><br>
+        Date of birth: <br>
+        <input type="text" name="dateofbirth" th:value="${person.birthDate}"><br><br>
+        Contact Information: <br>
+        <input type="text" Work Email="workEmail" th:value="${email.workEmail}">
+        <input type="text" Personal Email="personalEmail" th:value="${email.personalEmail}"><br><br>
+
+        <input type="text" Work Phone="workPhone" th:value="${phoneNumber.workNumber}" >
+        <input type="text" Personal Phone="personalPhone" th:value="${phoneNumber.personalNumber}" ><br><br>
+        
+        Address: <br>
+        <input type="text" Street="street" th:value="${address.street}" ><br><br>
+
+        <input type="text" City="city" th:value="${address.city}">
+
+        <input type="text" Postal code="postalCode" th:value="${address.postalCode}" >
+        <input type="text" Country="country" th:value="${address.country}"><br><br>
+
+
+        <input type="submit" value="Submit">
+    </fieldset>
+</form>
+</body>
+</html>
