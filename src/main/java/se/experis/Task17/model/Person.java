@@ -9,8 +9,8 @@ public class Person {
     String birthDate;
     int personID;
     int addressID;
-    ArrayList<PhoneNumber> phoneNumber;
-    ArrayList<Email> emails;
+    PhoneNumber phoneNumber;
+    Email emails;
     Address address  ;
 
 
@@ -85,19 +85,19 @@ public class Person {
         this.addressID = addressID;
     }
 
-    public void setPhoneNumber(ArrayList<PhoneNumber> phoneNumber) {
+    public void setPhoneNumber(PhoneNumber phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    public ArrayList<PhoneNumber> getPhoneNumber() {
+    public PhoneNumber getPhoneNumber() {
         return phoneNumber;
     }
 
-    public ArrayList<Email> getEmails() {
+    public Email getEmails() {
         return emails;
     }
 
-    public void setEmails(ArrayList<Email> emails) {
+    public void setEmails(Email emails) {
         this.emails = emails;
     }
 

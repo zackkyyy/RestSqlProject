@@ -1,11 +1,9 @@
 package se.experis.Task17.controller;
 
 
-import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 import se.experis.Task17.Task17Application;
@@ -33,7 +31,6 @@ public class personController {
         }
         return p;
     }
-
     @GetMapping("/person/id/{ID}")
     public Person personGet(@PathVariable int ID) {
         System.out.println("Trying to find person: " + ID);
@@ -70,7 +67,6 @@ public class personController {
     public
     @ResponseBody
     Person createPerson(@RequestBody MultiValueMap params) throws Exception {
-        System.out.println("params are " + params);
         String firstname = params.get("firstname").toString();
         String lastname = params.get("lastname").toString();
         String birthofdate = params.get("birthdate").toString();
@@ -106,8 +102,6 @@ public class personController {
         phonePersonal = phonePersonal.substring(1 , phonePersonal.length()-1 );
         Email email = new Email(workEmail ,personalEmail);
         PhoneNumber phoneNumber = new PhoneNumber(phoneWork, phonePersonal);
-        System.out.println(phoneWork);
-        System.out.println(phonePersonal);
         Address address = new Address(street, city,country, postalCode);
         Person person = new Person(firstname, lastname , birthofdate );
         DbHandler dbHandler = new DbHandler();
@@ -120,21 +114,27 @@ public class personController {
     )
     public
     @ResponseBody
-    Person deletePerson(@RequestBody MultiValueMap params) throws Exception {
+    void deletePerson(@RequestBody MultiValueMap params) throws Exception {
         System.out.println("params are " + params);
         String searchWord = params.get("searchField").toString();
         searchWord = searchWord.substring(1,searchWord.length()-1);
+        System.out.println(params.get("searchField").toString());
 
         Person returnPerson = null;
         for (Person person : Task17Application.people) {
-            if(person.getName().contains(searchWord)){
+
+            if(person.getName().toLowerCase().contains(searchWord.toLowerCase())){
                 returnPerson = person;
+                System.out.println("found");
             }
         }
-        return dbHandler.deletePerson(returnPerson);
+        if(returnPerson != null){
+            dbHandler.deletePerson(returnPerson);
+
+        }else{
+            System.out.println("Person not found");
+        }
     }
-
-
 
 
     public Person findPersonByID(int id ){
