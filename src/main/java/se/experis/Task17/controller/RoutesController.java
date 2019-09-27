@@ -1,5 +1,6 @@
 package se.experis.Task17.controller;
 
+
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import se.experis.Task17.Task17Application;
@@ -10,6 +11,7 @@ import se.experis.Task17.model.PhoneNumber;
 
 import java.util.ArrayList;
 
+
 /**
  * Author : Zacky Kharboutli
  * Date : 2019-09-26
@@ -18,12 +20,12 @@ import java.util.ArrayList;
 
 @org.springframework.stereotype.Controller
 public class RoutesController {
-    @GetMapping("/create")
+    @GetMapping("create")
     public String createPerson(){
         return "addPerson";
     }
 
-    @GetMapping("/delete")
+    @GetMapping("/person/delete")
     public String deletePerson(){
         return "delete";
     }
@@ -73,6 +75,7 @@ public class RoutesController {
         model.addAttribute("phoneNumbers" , returnPhoneNumber);
         model.addAttribute("emails" , returnEmail);
         model.addAttribute("addresses" , returnAddress);
+
 
         return "personProfile";
     }
