@@ -2,15 +2,9 @@ package se.experis.Task17.controller;
 
 
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 import se.experis.Task17.Task17Application;
-import se.experis.Task17.model.Address;
-import se.experis.Task17.model.Email;
-import se.experis.Task17.model.Person;
-import se.experis.Task17.model.PhoneNumber;
+import se.experis.Task17.model.*;
 
 
 import java.util.ArrayList;
@@ -31,6 +25,12 @@ public class personController {
         }
         return p;
     }
+
+    @GetMapping("/relations")
+    public ArrayList<Relationship> getAllRelations(){
+        return dbHandler.getAllRelations();
+    }
+
     @GetMapping("/person/id/{ID}")
     public Person personGet(@PathVariable int ID) {
         System.out.println("Trying to find person: " + ID);

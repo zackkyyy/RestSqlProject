@@ -1,5 +1,6 @@
 package se.experis.Task17.controller;
 
+import se.experis.Task17.Task17Application;
 import se.experis.Task17.model.*;
 
 import java.sql.*;
@@ -58,7 +59,7 @@ public class DbHandler {
 //                "Person2ID INTEGER NOT NULL, " +
 //                "ID INTEGER NOT NULL, " +
 //                "RelationshipType TEXT NOT NULL, " +
-//                "PRIMARY KEY (personID, ID));";
+//                "PRIMARY KEY (PersonID, Person2ID));";
 //
 //        try {
 //           // Connection conn = getConn();
@@ -144,6 +145,7 @@ public class DbHandler {
                 String birthdate = rs.getString("DateOfBirth");
                 Person perosn = new Person(name, LName, birthdate, id, rs.getInt("AddressID"));
                 perosn.setPhoneNumber(getPersonsPhoneNumbers(id));
+                perosn.setRelationship(getPersonsRelation(id));
                 perosn.setEmails(getPersonsEmails(id));
                 perosn.setAddress(getPersonsAddresses(rs.getInt("AddressID")));
                 people.add(perosn);
@@ -153,6 +155,7 @@ public class DbHandler {
         }
         return people;
     }
+
 
     /**
      * Method returns all Phone numbers in the database
@@ -242,12 +245,26 @@ public class DbHandler {
         int tempAddressId = getLastIDAdded("address");
         String sql = "INSERT INTO Person(FirstName, LastName, DateOfBirth, AddressID) VALUES(?,?,?,?)";
         conn = connect();
-        createAddress(address);
+        ArrayList<Address> existsAddresses = getALLAddress();
         PreparedStatement pstmt1 = conn.prepareStatement(sql);
+        int addressIDexist =0 ;
+        boolean exist = false;
+        for (int i = 0; i <existsAddresses.size() ; i++) {
+            if(existsAddresses.get(i).toString().equals(address.toString())){
+                addressIDexist = existsAddresses.get(i).getID();
+                pstmt1.setInt(4, addressIDexist);
+                exist= true;
+            }
+        }
+        if(!exist){
+            createAddress(address);
+            pstmt1.setInt(4, tempAddressId);
+        }
+
+
         pstmt1.setString(1, person.getFirstName());
         pstmt1.setString(2, person.getLastName());
         pstmt1.setString(3, person.getBirthDate());
-        pstmt1.setInt(4, tempAddressId);
         pstmt1.execute();
         person.setAddressID(tempAddressId);
         int thisPersonID = getLastIDAdded("person");
@@ -319,9 +336,8 @@ public class DbHandler {
      * Method that deletes a person and all his information from all tables in the DB
      *
      * @param p the person to be deleted
-     * @throws SQLException
      */
-    public void deletePerson(Person p) throws SQLException {
+    public void deletePerson(Person p){
 
         System.out.println(p.toString());
         Address address = getPersonsAddresses(p.getPersonID());
@@ -350,8 +366,6 @@ public class DbHandler {
             pstmt5.setInt(1, p.getPersonID());
             pstmt.executeUpdate();
             pstmt2.executeUpdate();
-            pstmt4.executeUpdate();
-            pstmt5.executeUpdate();
             try (ResultSet rs = pstmt6.executeQuery()) {
                 int counter = 0;
                 while(rs.next()){
@@ -363,6 +377,8 @@ public class DbHandler {
             } catch (SQLException e){
                 System.out.println(e.getMessage());
             }
+            pstmt4.executeUpdate();
+            pstmt5.executeUpdate();
             connect.commit();
             System.err.println("Person is deleted");
         } catch (SQLException r) {
@@ -463,4 +479,74 @@ public class DbHandler {
 
         return getAllPersons().get(personID - 1); //cause array
     }
+
+    public boolean addRelation(int PersonID, int Person2ID, String personRelationType ,String person2RelationType ) throws SQLException {
+
+        String query3 = String.format("INSERT INTO Relationship " +
+                "VALUES (%d, %d, \"%s\");", PersonID, Person2ID, person2RelationType);
+
+        String query4 = String.format("INSERT INTO Relationship " +
+                "VALUES (%d, %d, \"%s\");", Person2ID, PersonID, personRelationType);
+
+        try {
+            Connection conn = connect();
+            Statement stmt  = conn.createStatement();
+            stmt.addBatch(query3);
+            stmt.addBatch(query4);
+
+            stmt.executeBatch();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
+    private Relationship getPersonsRelation(int id) {
+        Relationship returnedRelation =null;
+        boolean found =false;
+        ArrayList<Relationship> relationships = getAllRelations();
+       for (Relationship relationship : relationships){
+           if(relationship.getPersonID() == id ){
+               returnedRelation = relationship;
+               found=true;
+           }
+       }
+       if(!found){
+           System.out.println("there are no relations for this person ");
+       }
+       return returnedRelation;
+    }
+
+    public ArrayList<Relationship> getAllRelations() {
+        String sql = "SELECT * FROM Relationship ;";
+        Relationship relationship = null;
+        ArrayList<Relationship> relations = new ArrayList<>();
+        try {
+            Connection conn = connect();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            int personID;
+            int person2ID;
+            String status;
+
+            System.out.println("\nTABLE: Family");
+            System.out.printf("%-10s %-10s %-10s\n", "personID", "person2ID", "status");
+            while (rs.next()) {
+                personID = rs.getInt("PersonID");
+                person2ID = rs.getInt("Person2ID");
+                status = rs.getString("RelationshipType");
+                relationship = new Relationship(personID,person2ID,status);
+                relations.add(relationship);
+                System.out.printf("%-10d %-10d %-10s\n", personID, person2ID, status);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return relations;
+    }
+
 }
