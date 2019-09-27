@@ -36,6 +36,62 @@ public class RoutesController {
         model.addAttribute("people" , arr);
         return "peoplePage";
     }
+    @GetMapping("/person/id/{ID}")
+    public String personGet(@PathVariable int ID, Model model) {
+        //System.out.println("Trying to find person: " + ID);
+        Person returnPerson = null;
+        PhoneNumber returnPhoneNumber = null;
+        Email returnEmail = null;
+        Address returnAddress = null;
+        int addressId = 0;
+        for (Person person : Task17Application.people) {
+            if (person.getPersonID() == ID) {
+                System.out.println(" --- PERSON FOUND --- ");
+                returnPerson = person;
+                addressId = person.getAddressID();
+            }
+        }
+        for (PhoneNumber number : Task17Application.phoneNumbers) {
+            if (number.getPersonID() == ID ) {
+                System.out.println(" --- Phne FOUND --- ");
+                returnPhoneNumber = number;
+            }
+        }
+        for (Email mail : Task17Application.emails) {
+            //System.out.println(mail.getEmailID());
+            if (mail.getPersonID() == ID ) {
+                System.out.println(" --- email FOUND --- ");
+                returnEmail = mail;
+            }
+        }
+       for (Address address : Task17Application.addresses) {
+            //System.out.println(addressId);
+            if (address.getID() == addressId ) {
+                System.out.println(" --- Addresses FOUND --- ");
+                returnAddress = address;
+            }
+        }
+        model.addAttribute("people" , returnPerson);
+        model.addAttribute("phoneNumbers" , returnPhoneNumber);
+        model.addAttribute("emails" , returnEmail);
+        model.addAttribute("addresses" , returnAddress);
+
+
+        return "personProfile";
+    }
+
+//    @GetMapping("/delete/{id}")
+//    public String deletePerson(@PathVariable int id , Model model) {
+//        Person returnPerson = null;
+//        for (Person person : Task17Application.people) {
+//            if (person.getPersonID() == id) {
+//                System.out.println(" --- PERSON FOUND --- ");
+//                returnPerson = person;
+//            }
+//        }
+//        model.addAttribute("person" , returnPerson);
+//        return "delete";
+//    }
 
     @GetMapping("/update/{ID}")
     public String updatePerson(@PathVariable int ID, Model model){
