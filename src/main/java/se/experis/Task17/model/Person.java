@@ -9,9 +9,20 @@ public class Person {
     String birthDate;
     int personID;
     int addressID;
-    ArrayList<PhoneNumber> phoneNumber;
-    ArrayList<Email> emails;
+    PhoneNumber phoneNumber;
+    Email emails;
     Address address  ;
+    Relationship relationship;
+
+
+    public Person(String firstName, String lastName, String birthDate, int personID, int addressID , Relationship relationship) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+        this.personID = personID;
+        this.addressID = addressID;
+        this.relationship = relationship;
+    }
 
 
     public Person(String firstName, String lastName, String birthDate, int personID, int addressID) {
@@ -20,6 +31,13 @@ public class Person {
         this.birthDate = birthDate;
         this.personID = personID;
         this.addressID = addressID;
+    }
+    public Relationship getRelationship() {
+        return relationship;
+    }
+
+    public void setRelationship(Relationship relationship) {
+        this.relationship = relationship;
     }
 
     public Person(String firstName, String lastName, String birthDate) {
@@ -85,19 +103,19 @@ public class Person {
         this.addressID = addressID;
     }
 
-    public void setPhoneNumber(ArrayList<PhoneNumber> phoneNumber) {
+    public void setPhoneNumber(PhoneNumber phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    public ArrayList<PhoneNumber> getPhoneNumber() {
+    public PhoneNumber getPhoneNumber() {
         return phoneNumber;
     }
 
-    public ArrayList<Email> getEmails() {
+    public Email getEmails() {
         return emails;
     }
 
-    public void setEmails(ArrayList<Email> emails) {
+    public void setEmails(Email emails) {
         this.emails = emails;
     }
 
