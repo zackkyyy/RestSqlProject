@@ -34,7 +34,7 @@ public class personController {
         return p;
     }
 
-    @GetMapping("/person/id/{ID}")
+  /*  @GetMapping("/person/id/{ID}")
     public Person personGet(@PathVariable int ID) {
         System.out.println("Trying to find person: " + ID);
         Person returnPerson = null;
@@ -45,7 +45,7 @@ public class personController {
             }
         }
         return returnPerson;
-    }
+    }*/
     @GetMapping("/person/name/{name}")
     public Person customerGet(@PathVariable String name) {
         System.out.println("Trying to find person: " + name);
