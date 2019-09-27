@@ -332,6 +332,7 @@ public class DbHandler {
         String sql3 = "DELETE FROM Address WHERE ID = ?; ";
         String sql4 = "DELETE FROM Phonenumber WHERE PersonID = ?; ";
         String sql5 = "DELETE FROM Relationship WHERE PersonID =?; ";
+        String sql6 = "SELECT COUNT(*) FROM Person WHERE AddressID=?";
         Connection connect = connect();
         try {
             connect.setAutoCommit(false);
@@ -340,6 +341,7 @@ public class DbHandler {
             PreparedStatement pstmt3 = connect.prepareStatement(sql3);
             PreparedStatement pstmt4 = connect.prepareStatement(sql4);
             PreparedStatement pstmt5 = connect.prepareStatement(sql5);
+            PreparedStatement pstmt6 = connect.prepareStatement(sql6);
 
             pstmt.setInt(1, p.getPersonID());
             pstmt2.setInt(1, p.getPersonID());
@@ -348,9 +350,19 @@ public class DbHandler {
             pstmt5.setInt(1, p.getPersonID());
             pstmt.executeUpdate();
             pstmt2.executeUpdate();
-            pstmt3.executeUpdate();
             pstmt4.executeUpdate();
             pstmt5.executeUpdate();
+            try (ResultSet rs = pstmt6.executeQuery()) {
+                int counter = 0;
+                while(rs.next()){
+                    counter++;
+                }
+                if (counter == 1) {
+                    pstmt3.executeUpdate();
+                }
+            } catch (SQLException e){
+                System.out.println(e.getMessage());
+            }
             connect.commit();
             System.err.println("Person is deleted");
         } catch (SQLException r) {
