@@ -480,30 +480,13 @@ public class DbHandler {
         return getAllPersons().get(personID - 1); //cause array
     }
 
-    public boolean addRelation(int PersonID, int Person2ID, String personRelationType ,String person2RelationType ) throws SQLException {
-
-        String query3 = String.format("INSERT INTO Relationship " +
-                "VALUES (%d, %d, \"%s\");", PersonID, Person2ID, person2RelationType);
-
-        String query4 = String.format("INSERT INTO Relationship " +
-                "VALUES (%d, %d, \"%s\");", Person2ID, PersonID, personRelationType);
-
-        try {
-            Connection conn = connect();
-            Statement stmt  = conn.createStatement();
-            stmt.addBatch(query3);
-            stmt.addBatch(query4);
-
-            stmt.executeBatch();
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            return false;
-        }
-
-        return true;
-    }
-
+    /**
+     *  Method that returns the relations associated to a person
+     *
+     * @param id integer represent the id of the person
+     *
+     * @return Relationship object represent the row
+     */
     private Relationship getPersonsRelation(int id) {
         Relationship returnedRelation =null;
         boolean found =false;
@@ -520,6 +503,11 @@ public class DbHandler {
        return returnedRelation;
     }
 
+    /**
+     *  Method that returns all relations
+     *
+     * @return list of all relations
+     */
     public ArrayList<Relationship> getAllRelations() {
         String sql = "SELECT * FROM Relationship ;";
         Relationship relationship = null;
@@ -528,20 +516,9 @@ public class DbHandler {
             Connection conn = connect();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-
-            int personID;
-            int person2ID;
-            String status;
-
-            System.out.println("\nTABLE: Family");
-            System.out.printf("%-10s %-10s %-10s\n", "personID", "person2ID", "status");
             while (rs.next()) {
-                personID = rs.getInt("PersonID");
-                person2ID = rs.getInt("Person2ID");
-                status = rs.getString("RelationshipType");
-                relationship = new Relationship(personID,person2ID,status);
+                relationship = new Relationship(rs.getInt("PersonID"),rs.getInt("Person2ID"),rs.getString("RelationshipType"));
                 relations.add(relationship);
-                System.out.printf("%-10d %-10d %-10s\n", personID, person2ID, status);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

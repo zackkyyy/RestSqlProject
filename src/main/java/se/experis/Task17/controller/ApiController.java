@@ -36,10 +36,6 @@ public class ApiController {
     public ArrayList<Address> getAllAddresses(){
         return dbHandler.getALLAddress();
     }
-    @GetMapping("/api/person/id/{ID}")
-    public Person personGet(@PathVariable int ID) {
-        return controller.personGet(ID);
-    }
     @GetMapping("/api/person/name/{name}")
     public Person customerGet(@PathVariable String name) {
         return controller.customerGet(name);

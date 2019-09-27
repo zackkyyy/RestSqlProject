@@ -4,19 +4,11 @@ package se.experis.Task17.controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import se.experis.Task17.Task17Application;
-import se.experis.Task17.model.Address;
-import se.experis.Task17.model.Email;
-import se.experis.Task17.model.Person;
-import se.experis.Task17.model.PhoneNumber;
+import se.experis.Task17.model.*;
 
 import java.util.ArrayList;
 
 
-/**
- * Author : Zacky Kharboutli
- * Date : 2019-09-26
- * Project: Task17
- */
 
 @org.springframework.stereotype.Controller
 public class RoutesController {
@@ -43,6 +35,7 @@ public class RoutesController {
         PhoneNumber returnPhoneNumber = null;
         Email returnEmail = null;
         Address returnAddress = null;
+        ArrayList<Relationship> returnedRelationList =new ArrayList<>();
         int addressId = 0;
         for (Person person : Task17Application.people) {
             if (person.getPersonID() == ID) {
@@ -71,12 +64,17 @@ public class RoutesController {
                 returnAddress = address;
             }
         }
+       for(Relationship relationship : Task17Application.relationships){
+           if(relationship.getPersonID() == ID){
+               System.out.println("Relation founds");
+               returnedRelationList.add(relationship);
+           }
+       }
         model.addAttribute("people" , returnPerson);
         model.addAttribute("phoneNumbers" , returnPhoneNumber);
         model.addAttribute("emails" , returnEmail);
         model.addAttribute("addresses" , returnAddress);
-
-
+        model.addAttribute("relations",returnedRelationList);
         return "personProfile";
     }
 

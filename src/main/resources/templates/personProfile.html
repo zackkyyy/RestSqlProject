@@ -8,7 +8,7 @@
 
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>th:text="${person.firstName}"</title>
 </head>
 <body>
 <div class="container" >
@@ -24,7 +24,7 @@
                             </h2>
                         </div>
                         <br>
-                        <strong>Phone</strong>
+                       <h4> <strong>Phone</strong></h4>
                         <div th:each="phone: ${phoneNumbers}">
                             <p th:inline="text" >
                                 <strong>Personal Phone: </strong>
@@ -36,18 +36,18 @@
                             </p>
                         </div>
                         <br>
-                        <strong>Email Adresse</strong>
+                        <h4><strong>Email Adresse</strong></h4>
                         <div th:each="email: ${emails}">
                             <p th:inline="text">
                                 <strong>Personal Email: </strong>
                                 [[${email.personalEmail}]]
-
+                                <br>
                                 <strong>Work Email: </strong>
                                 [[${email.workEmail}]]
                             </p>
                         </div>
                         <br>
-                        <strong>Address</strong>
+                        <h4><strong>Address</strong></h4>
                         <div th:each="address: ${addresses}">
                             <p th:inline="text">
                                 <strong>Country: </strong>
@@ -64,6 +64,18 @@
                             <p th:inline="text">
                                 <strong>Zip: </strong>
                                 [[${address.postalCode}]]
+                            </p>
+                        </div>
+
+                        <h4><strong>Relations</strong></h4>
+                        <div th:each="relation: ${relations}">
+                            <p th:inline="text">
+                                <strong>Id of the relation perosn: </strong>
+                                [[${relation.Person2ID}]]
+                            </p>
+                            <p th:inline="text">
+                                <strong>Relation type: </strong>
+                                [[${relation.relationType}]]
                             </p>
                         </div>
                         </p>
