@@ -8,11 +8,14 @@ import se.experis.Task17.model.*;
 
 import java.util.ArrayList;
 
-@RestController
+@RestController("/api")
 public class ApiController {
     private personController controller = new personController();
     private DbHandler dbHandler = new DbHandler();
-
+    @GetMapping("/api")
+    public ArrayList<Person> getAllPersons(){
+        return dbHandler.getAllPersons();
+    }
     @GetMapping("/api/relations")
     public ArrayList<Relationship> getAllRelations(){
         return dbHandler.getAllRelations();
