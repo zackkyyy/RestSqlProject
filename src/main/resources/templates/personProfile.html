@@ -41,7 +41,10 @@
                             <p th:inline="text">
                                 <strong>Personal Email: </strong>
                                 [[${email.personalEmail}]]
-                                <br>
+
+                            </p>
+                         
+                            <p>
                                 <strong>Work Email: </strong>
                                 [[${email.workEmail}]]
                             </p>
@@ -81,59 +84,17 @@
                         </p>
                     </div>
                     <div class="col-xs-12 col-sm-4 text-center">
-                        <figure>
-                            <img src="http://www.localcrimenews.com/wp-content/uploads/2013/07/default-user-icon-profile.png" alt="" class="img-circle img-responsive">
-                            <figcaption class="ratings">
-                                <p>Ratings
-                                    <a href="#">
-                                        <span class="fa fa-star"></span>
-                                    </a>
-                                    <a href="#">
-                                        <span class="fa fa-star"></span>
-                                    </a>
-                                    <a href="#">
-                                        <span class="fa fa-star"></span>
-                                    </a>
-                                    <a href="#">
-                                        <span class="fa fa-star"></span>
-                                    </a>
-                                    <a href="#">
-                                        <span class="fa fa-star-o"></span>
-                                    </a>
-                                </p>
-                            </figcaption>
-                        </figure>
+                        <img src="https://i.ibb.co/dWyyhkN/Billy.jpg" alt="" class="img-rounded img-responsive" />
                     </div>
                 </div>
-                <div class="col-xs-12 divider text-center">
+                <div class="col-xs-12 divider text-center centered">
                     <div class="col-xs-12 col-sm-4 emphasis">
-                        <h2><strong> 20,7K </strong></h2>
-                        <p><small>Followers</small></p>
-                        <button class="btn btn-success btn-block"><span class="fa fa-plus-circle"></span> Follow </button>
+                        <p><small>Delete this person</small></p>
+                        <button href="/" class="btn btn-danger btn-block"><span class="fa fa-plus-circle"></span> Delete </button>
                     </div>
                     <div class="col-xs-12 col-sm-4 emphasis">
-                        <h2><strong>245</strong></h2>
-                        <p><small>Following</small></p>
-                        <button class="btn btn-info btn-block"><span class="fa fa-user"></span> View Profile </button>
-                    </div>
-                    <div class="col-xs-12 col-sm-4 emphasis">
-                        <h2><strong>43</strong></h2>
-                        <p><small>Snippets</small></p>
-                        <div class="btn-group dropup btn-block">
-                            <button type="button" class="btn btn-primary"><span class="fa fa-gear"></span> Options </button>
-                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu text-left" role="menu">
-                                <li><a href="#"><span class="fa fa-envelope pull-right"></span> Send an email </a></li>
-                                <li><a href="#"><span class="fa fa-list pull-right"></span> Add or remove from a list  </a></li>
-                                <li class="divider"></li>
-                                <li><a href="#"><span class="fa fa-warning pull-right"></span>Report this user for spam</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#" class="btn disabled" role="button"> Unfollow </a></li>
-                            </ul>
-                        </div>
+                        <p><small>Update information</small></p>
+                        <button href="/" class="btn btn-info btn-block "><span class="fa fa-user"></span> Update </button>
                     </div>
                 </div>
             </div>
@@ -153,24 +114,15 @@
     {
         font-family: 'Lato', 'sans-serif';
     }
+    .centered {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
     .profile
     {
         min-height: 355px;
         display: inline-block;
-    }
-    figcaption.ratings
-    {
-        margin-top:20px;
-    }
-    figcaption.ratings a
-    {
-        color:#f1c40f;
-        font-size:11px;
-    }
-    figcaption.ratings a:hover
-    {
-        color:#f39c12;
-        text-decoration:none;
     }
     .divider
     {
