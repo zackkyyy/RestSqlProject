@@ -1,8 +1,8 @@
 package se.experis.Task17.controller;
 
+
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import se.experis.Task17.Task17Application;
 import se.experis.Task17.model.Address;
 import se.experis.Task17.model.Email;
@@ -10,7 +10,7 @@ import se.experis.Task17.model.Person;
 import se.experis.Task17.model.PhoneNumber;
 
 import java.util.ArrayList;
-import java.util.Map;
+
 
 /**
  * Author : Zacky Kharboutli
@@ -20,12 +20,12 @@ import java.util.Map;
 
 @org.springframework.stereotype.Controller
 public class RoutesController {
-    @GetMapping("/create")
+    @GetMapping("create")
     public String createPerson(){
         return "addPerson";
     }
 
-    @GetMapping("/delete")
+    @GetMapping("/person/delete")
     public String deletePerson(){
         return "delete";
     }
@@ -36,20 +36,6 @@ public class RoutesController {
         model.addAttribute("people" , arr);
         return "peoplePage";
     }
-
-
-//    @GetMapping("/delete/{id}")
-//    public String deletePerson(@PathVariable int id , Model model) {
-//        Person returnPerson = null;
-//        for (Person person : Task17Application.people) {
-//            if (person.getPersonID() == id) {
-//                System.out.println(" --- PERSON FOUND --- ");
-//                returnPerson = person;
-//            }
-//        }
-//        model.addAttribute("person" , returnPerson);
-//        return "delete";
-//    }
 
     @GetMapping("/update/{ID}")
     public String updatePerson(@PathVariable int ID, Model model){
