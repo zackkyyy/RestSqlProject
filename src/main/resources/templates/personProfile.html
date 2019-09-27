@@ -57,7 +57,7 @@
                             </h2>
                         </div>
                         <br>
-                       <h4 class="centered"> <strong>Phone</strong></h4>
+                        <h4 class="centered"> <strong>Phone</strong></h4>
                         <div th:each="phone: ${phoneNumbers}">
                             <p th:inline="text" class="centered">
                                 <strong>Personal Phone: </strong>
@@ -115,20 +115,22 @@
                         <img src="https://i.ibb.co/dWyyhkN/Billy.jpg" alt="" class="img-rounded img-responsive" />
                     </div>
                 </div>
-                    <form action="/person/delete" method="get">
+                <div th:each="person: ${people}">
+                    <form th:action="@{|/person/delete/${person.personID}|}" method="get">
                         <div class="col-xs-12 col-sm-4 emphasis text-center">
                             <p><small>Delete this person</small></p>
                             <button class="btn btn-danger btn-block"><span class="fa fa-plus-circle"></span> Delete </button>
                         </div>
                     </form>
-                    <div th:each="person: ${people}">
-                        <form th:action="@{|/person/update/${person.personID}|}" method="get">
-                            <div class="col-xs-12 col-sm-4 emphasis text-center">
-                                <p><small>Update information</small></p>
-                                <button  class="btn btn-info btn-block leftbtn"><span class="fa fa-user"></span> Update </button>
-                            </div>
-                        </form>
-                    </div>
+                </div>
+                <div th:each="person: ${people}">
+                    <form th:action="@{|/person/update/${person.personID}|}" method="get">
+                        <div class="col-xs-12 col-sm-4 emphasis text-center">
+                            <p><small>Update information</small></p>
+                            <button  class="btn btn-info btn-block leftbtn"><span class="fa fa-user"></span> Update </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
