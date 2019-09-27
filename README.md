@@ -1,4 +1,10 @@
 # RestSqlProject
+Team members: 
+Zacky Kharboutli
+Tim Larsson 
+Pär Söderlund 
+Alexandra Bjäremo
+
 Spring boot application that handles queries for SQL database from web application 
 
 Website interface:
