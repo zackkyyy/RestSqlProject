@@ -23,54 +23,71 @@ public class DbHandler {
     }
 //
 //    public void createTables(){
-//        final String sqlPersonTable = ""
-//                + "CREATE TABLE IF NOT EXISTS Person "
-//                + "(PersonID INTEGER PRIMARY KEY AUTOINCREMENT, "
-//                + "FirstName TEXT NOT NULL, "
-//                + "LastName TEXT NOT NULL, "
-//                + "FOREIGN KEY (AddressID) REFERENCES Address(ID) "
-//                + "DateOfBirth TEXT NOT NULL);";
 //
-//        final String sqlEmailTable = ""
-//                + "CREATE TABLE IF NOT EXISTS Email "
-//                + "(PersonID INTEGER NOT NULL UNIQUE, "
-//                + "Work TEXT, "
-//                + "Personal TEXT, "
-//                + "FOREIGN KEY (PersonID) REFERENCES Person(PersonID));";
 //
-//        final String sqlContactTable = ""
-//                + "CREATE TABLE IF NOT EXISTS Phonenumber ( "
-//                + "PersonID INTEGER NOT NULL UNIQUE, "
-//                + "Personal TEXT, "
-//                + "Work TEXT, "
-//                + "FOREIGN KEY (PersonID) REFERENCES Person(PersonID));";
+//        final String sqlPersonTable = "CREATE TABLE IF NOT EXISTS \"Person\" (\n" +
+//                "\t\"ID\"\tSERIAL NOT NULL PRIMARY KEY UNIQUE,\n" +
+//                "\t\"FirstName\"\tvarchar(50) NOT NULL,\n" +
+//                "\t\"LastName\"\tvarchar(50) NOT NULL,\n" +
+//                "\t\"DateOfBirth\" varchar(50) NOT NULL,\n" +
+//                "\t\"AddressID\"\tINTEGER NOT NULL,\n" +
+//                "\tFOREIGN KEY(\"AddressID\") REFERENCES \"Address\"(\"ID\")\n" +
+//                ")";
 //
-//        final String sqlAddressTable = ""
-//                + "CREATE TABLE IF NOT EXISTS Address ("
-//                + "ID INTEGER PRIMARY KEY AUTOINCREMENT, "
-//                + "Street TEXT, "
-//                + "PostalCode TEXT, "
-//                + "City TEXT, "
-//                + "Country TEXT);";
 //
-//        final String sqlRelationTable = "" +
-//                "CREATE TABLE IF NOT EXISTS Relationship (" +
-//                "PersonID INTEGER NOT NULL, " +
-//                "Person2ID INTEGER NOT NULL, " +
-//                "ID INTEGER NOT NULL, " +
-//                "RelationshipType TEXT NOT NULL, " +
-//                "PRIMARY KEY (PersonID, Person2ID));";
+//        final String sqlEmailTable =   "CREATE TABLE IF NOT EXISTS \"Email\" (\n" +
+//                "\t\"ID\"\tSERIAL NOT NULL PRIMARY KEY  UNIQUE,\n" +
+//                "\t\"PersonID\"\tINTEGER NOT NULL,\n" +
+//                "\t\"Work\"\tvarchar(50) NOT NULL UNIQUE,\n" +
+//                "\t\"Personal\"\tvarchar(50) NOT NULL UNIQUE,\n" +
+//                "\tFOREIGN KEY(\"PersonID\") REFERENCES \"Person\"(\"ID\")\n" +
+//                ")";
+//
+//
+//
+//
+//        final String sqlContactTable = "CREATE TABLE IF NOT EXISTS \"Phonenumber\" (\n" +
+//                "\t\"ID\"\tSERIAL NOT NULL PRIMARY KEY  UNIQUE,\n" +
+//                "\t\"PersonID\"\tINTEGER NOT NULL,\n" +
+//                "\t\"Personal\"\tvarchar(50) NOT NULL UNIQUE,\n" +
+//                "\t\"Work\"\tvarchar(50) NOT NULL UNIQUE,\n" +
+//                "\tFOREIGN KEY(\"PersonID\") REFERENCES \"Person\"(\"ID\")\n" +
+//                ")";
+//
+//
+//
+//        final String sqlAddressTable = "CREATE TABLE IF NOT EXISTS \"Address\" (\n" +
+//                "\t\"addressId\"\tSERIAL NOT NULL PRIMARY KEY UNIQUE,\n" +
+//                "\t\"city\"\tvarchar(50) NOT NULL,\n" +
+//                "\t\"street\"\tvarchar(50) NOT NULL,\n" +
+//                "\t\"postalCode\"\tvarchar(50)\n" +
+//                ")";
+//
+//
+//
+//        final String sqlRelationTable =  "CREATE TABLE IF NOT EXISTS \"Relationship\" (\n" +
+//                "\t\"relationshipId\"\tSERIAL NOT NULL UNIQUE,\n" +
+//                "\t\"PersonID\"\tINTEGER NOT NULL,\n" +
+//                "\t\"Person2ID\"\tINTEGER NOT NULL,\n" +
+//                "\t\"RelationshipType\"\tvarchar(50) NOT NULL,\n" +
+//                "\tPRIMARY KEY(\"PersonID\",\"Person2ID\"),\n" +
+//                "\tFOREIGN KEY(\"PersonID\") REFERENCES \"Person\"(\"ID\"),\n" +
+//                "\tFOREIGN KEY(\"Person2ID\") REFERENCES \"Person\"(\"ID\")\n" +
+//                ")";
 //
 //        try {
-//           // Connection conn = getConn();
+//           conn = connect();
 //            Statement stmt  = conn.createStatement();
+//            stmt.addBatch(sqlAddressTable);
 //            stmt.addBatch(sqlPersonTable);
 //            stmt.addBatch(sqlEmailTable);
 //            stmt.addBatch(sqlContactTable);
-//            stmt.addBatch(sqlAddressTable);
 //            stmt.addBatch(sqlRelationTable);
 //            stmt.executeBatch();
+//            System.out.println("Created");
 //        } catch (SQLException e) {
+//            System.out.println("there is error ");
+//            System.out.println(e.getMessage());
 //        }
 //    }
 
@@ -321,8 +338,6 @@ public class DbHandler {
      */
     public void createPhoneNumbers(String work, String personal, int id) throws SQLException {
         Connection con = connect();
-        System.out.println(work);
-        System.out.println(personal);
         String insertSql = "INSERT INTO Phonenumber( Work, Personal , PersonID ) VALUES(?,?,?)";
         PreparedStatement pstmt1 = con.prepareStatement(insertSql);
         pstmt1.setString(1, work);
@@ -339,9 +354,7 @@ public class DbHandler {
      */
     public void deletePerson(Person p){
 
-        System.out.println(p.toString());
         Address address = getPersonsAddresses(p.getPersonID());
-        System.out.println(address.toString());
         int addressID = address.getID();
         String sql1 = "DELETE FROM Person WHERE ID = ?; ";
         String sql2 = "DELETE FROM Email WHERE PersonID = ?; ";
@@ -498,7 +511,7 @@ public class DbHandler {
            }
        }
        if(!found){
-           System.out.println("there are no relations for this person ");
+           //System.out.println("there are no relations for this person ");
        }
        return returnedRelation;
     }

@@ -19,6 +19,7 @@ public class Task17Application {
 	private static DbHandler dbHandler = new DbHandler();
 
 	public static void main(String[] args) {
+		//dbHandler.createTables();
 		people = dbHandler.getAllPersons();
 		phoneNumbers = dbHandler.getAllPhoneNumbers();
 		emails = dbHandler.getALLEmails();
