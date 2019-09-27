@@ -1,5 +1,6 @@
 package se.experis.Task17.controller;
 
+import se.experis.Task17.Task17Application;
 import se.experis.Task17.model.*;
 
 import java.sql.*;
@@ -58,7 +59,7 @@ public class DbHandler {
 //                "Person2ID INTEGER NOT NULL, " +
 //                "ID INTEGER NOT NULL, " +
 //                "RelationshipType TEXT NOT NULL, " +
-//                "PRIMARY KEY (personID, ID));";
+//                "PRIMARY KEY (PersonID, Person2ID));";
 //
 //        try {
 //           // Connection conn = getConn();
@@ -144,6 +145,7 @@ public class DbHandler {
                 String birthdate = rs.getString("DateOfBirth");
                 Person perosn = new Person(name, LName, birthdate, id, rs.getInt("AddressID"));
                 perosn.setPhoneNumber(getPersonsPhoneNumbers(id));
+                perosn.setRelationship(getPersonsRelation(id));
                 perosn.setEmails(getPersonsEmails(id));
                 perosn.setAddress(getPersonsAddresses(rs.getInt("AddressID")));
                 people.add(perosn);
@@ -153,6 +155,7 @@ public class DbHandler {
         }
         return people;
     }
+
 
     /**
      * Method returns all Phone numbers in the database
@@ -242,12 +245,26 @@ public class DbHandler {
         int tempAddressId = getLastIDAdded("address");
         String sql = "INSERT INTO Person(FirstName, LastName, DateOfBirth, AddressID) VALUES(?,?,?,?)";
         conn = connect();
-        createAddress(address);
+        ArrayList<Address> existsAddresses = getALLAddress();
         PreparedStatement pstmt1 = conn.prepareStatement(sql);
+        int addressIDexist =0 ;
+        boolean exist = false;
+        for (int i = 0; i <existsAddresses.size() ; i++) {
+            if(existsAddresses.get(i).toString().equals(address.toString())){
+                addressIDexist = existsAddresses.get(i).getID();
+                pstmt1.setInt(4, addressIDexist);
+                exist= true;
+            }
+        }
+        if(!exist){
+            createAddress(address);
+            pstmt1.setInt(4, tempAddressId);
+        }
+
+
         pstmt1.setString(1, person.getFirstName());
         pstmt1.setString(2, person.getLastName());
         pstmt1.setString(3, person.getBirthDate());
-        pstmt1.setInt(4, tempAddressId);
         pstmt1.execute();
         person.setAddressID(tempAddressId);
         int thisPersonID = getLastIDAdded("person");
@@ -319,9 +336,8 @@ public class DbHandler {
      * Method that deletes a person and all his information from all tables in the DB
      *
      * @param p the person to be deleted
-     * @throws SQLException
      */
-    public void deletePerson(Person p) throws SQLException {
+    public void deletePerson(Person p){
 
         System.out.println(p.toString());
         Address address = getPersonsAddresses(p.getPersonID());
@@ -332,6 +348,7 @@ public class DbHandler {
         String sql3 = "DELETE FROM Address WHERE ID = ?; ";
         String sql4 = "DELETE FROM Phonenumber WHERE PersonID = ?; ";
         String sql5 = "DELETE FROM Relationship WHERE PersonID =?; ";
+        String sql6 = "SELECT COUNT(*) FROM Person WHERE AddressID=?";
         Connection connect = connect();
         try {
             connect.setAutoCommit(false);
@@ -340,6 +357,7 @@ public class DbHandler {
             PreparedStatement pstmt3 = connect.prepareStatement(sql3);
             PreparedStatement pstmt4 = connect.prepareStatement(sql4);
             PreparedStatement pstmt5 = connect.prepareStatement(sql5);
+            PreparedStatement pstmt6 = connect.prepareStatement(sql6);
 
             pstmt.setInt(1, p.getPersonID());
             pstmt2.setInt(1, p.getPersonID());
@@ -348,7 +366,17 @@ public class DbHandler {
             pstmt5.setInt(1, p.getPersonID());
             pstmt.executeUpdate();
             pstmt2.executeUpdate();
-            pstmt3.executeUpdate();
+            try (ResultSet rs = pstmt6.executeQuery()) {
+                int counter = 0;
+                while(rs.next()){
+                    counter++;
+                }
+                if (counter == 1) {
+                    pstmt3.executeUpdate();
+                }
+            } catch (SQLException e){
+                System.out.println(e.getMessage());
+            }
             pstmt4.executeUpdate();
             pstmt5.executeUpdate();
             connect.commit();
@@ -451,4 +479,51 @@ public class DbHandler {
 
         return getAllPersons().get(personID - 1); //cause array
     }
+
+    /**
+     *  Method that returns the relations associated to a person
+     *
+     * @param id integer represent the id of the person
+     *
+     * @return Relationship object represent the row
+     */
+    private Relationship getPersonsRelation(int id) {
+        Relationship returnedRelation =null;
+        boolean found =false;
+        ArrayList<Relationship> relationships = getAllRelations();
+       for (Relationship relationship : relationships){
+           if(relationship.getPersonID() == id ){
+               returnedRelation = relationship;
+               found=true;
+           }
+       }
+       if(!found){
+           System.out.println("there are no relations for this person ");
+       }
+       return returnedRelation;
+    }
+
+    /**
+     *  Method that returns all relations
+     *
+     * @return list of all relations
+     */
+    public ArrayList<Relationship> getAllRelations() {
+        String sql = "SELECT * FROM Relationship ;";
+        Relationship relationship = null;
+        ArrayList<Relationship> relations = new ArrayList<>();
+        try {
+            Connection conn = connect();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                relationship = new Relationship(rs.getInt("PersonID"),rs.getInt("Person2ID"),rs.getString("RelationshipType"));
+                relations.add(relationship);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return relations;
+    }
+
 }

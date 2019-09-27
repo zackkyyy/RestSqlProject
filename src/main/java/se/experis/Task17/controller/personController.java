@@ -31,18 +31,18 @@ public class personController {
         }
         return p;
     }
-    @GetMapping("/person/id/{ID}")
-    public Person personGet(@PathVariable int ID) {
-        System.out.println("Trying to find person: " + ID);
-        Person returnPerson = null;
-        for (Person person : Task17Application.people) {
-            if (person.getPersonID() == ID) {
-                System.out.println(" --- PERSON FOUND --- ");
-                returnPerson = person;
-            }
-        }
-        return returnPerson;
-    }
+//    @GetMapping("/person/id/{ID}")
+//    public Person personGet(@PathVariable int ID) {
+//        System.out.println("Trying to find person: " + ID);
+//        Person returnPerson = null;
+//        for (Person person : Task17Application.people) {
+//            if (person.getPersonID() == ID) {
+//                System.out.println(" --- PERSON FOUND --- ");
+//                returnPerson = person;
+//            }
+//        }
+//        return returnPerson;
+//    }
     @GetMapping("/person/name/{name}")
     public Person customerGet(@PathVariable String name) {
         System.out.println("Trying to find person: " + name);

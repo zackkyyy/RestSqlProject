@@ -12,6 +12,17 @@ public class Person {
     PhoneNumber phoneNumber;
     Email emails;
     Address address  ;
+    Relationship relationship;
+
+
+    public Person(String firstName, String lastName, String birthDate, int personID, int addressID , Relationship relationship) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+        this.personID = personID;
+        this.addressID = addressID;
+        this.relationship = relationship;
+    }
 
 
     public Person(String firstName, String lastName, String birthDate, int personID, int addressID) {
@@ -20,6 +31,13 @@ public class Person {
         this.birthDate = birthDate;
         this.personID = personID;
         this.addressID = addressID;
+    }
+    public Relationship getRelationship() {
+        return relationship;
+    }
+
+    public void setRelationship(Relationship relationship) {
+        this.relationship = relationship;
     }
 
     public Person(String firstName, String lastName, String birthDate) {
