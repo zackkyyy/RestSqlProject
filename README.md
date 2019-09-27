@@ -8,7 +8,7 @@ This application can is hosted on Heroku:[https://personsdb4task17.herokuapp.com
 
 For browseing localy:
 ### APIs
-[list all persons as JSON](localhost:8080/api/people)
+[list all persons as JSON]<localhost:8080/api/people>
 []()             
 [list all emails as JSON](localhost:8080/api/emails)    
 [list all phones JSON](localhost:8080/api/phones)  
