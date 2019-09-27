@@ -44,17 +44,17 @@
     <p class="h4 mb-4">This is a testing page</p>
 
 </div>
-<ul class="list-group" th:each="person: ${people}">
-    <li class="list-group-item h5 mb-5 centered">
+<ul class="list-group" >
         <div class="list-group">
-            <a th:href="@{|/person/id/${person.personID}|}" class="list-group-item list-group-item-action active">
-                <div class="d-flex w-100 justify-content-between">
-                    <td th:text="${person.firstName}" />
-                    <td th:text="${person.lastName}" />
-                </div>
-                <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                <small>Donec id elit non mi porta.</small>
-            </a>
+            <li class="list-group-item h5 mb-5 centered" th:each="person: ${people}">
+                <a th:href="@{|/person/id/${person.personID}|}" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <td th:text="${person.firstName}" />
+                        <td th:text="${person.lastName}" />
+                    </div>
+                    <small>Click for more information about <span th:text="${person.firstName}" th:remove="tag">title</span></small>
+                </a>
+            </li>
         </div>
     </li>
 </ul>
