@@ -19,3 +19,6 @@ localhost:8080/api/emails        	list all emails as JSON
 localhost:8080/api/phones        	list all phones as JSON
 localhost:8080/api/addresses         	list all addresses as JSON
 localhost:8080/api/relations         	list all relations as JSON
+
+Heroku link
+https://personsdb4task17.herokuapp.com/ 
