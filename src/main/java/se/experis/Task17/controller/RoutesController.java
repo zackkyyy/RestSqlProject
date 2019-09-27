@@ -30,7 +30,7 @@ public class RoutesController {
     }
     @GetMapping("/person/id/{ID}")
     public String personGet(@PathVariable int ID, Model model) {
-        //System.out.println("Trying to find person: " + ID);
+
         Person returnPerson = null;
         PhoneNumber returnPhoneNumber = null;
         Email returnEmail = null;
@@ -64,10 +64,16 @@ public class RoutesController {
                 returnAddress = address;
             }
         }
+       String name =null;
        for(Relationship relationship : Task17Application.relationships){
            if(relationship.getPersonID() == ID){
                System.out.println("Relation founds");
                returnedRelationList.add(relationship);
+               for(Person person :Task17Application.people){
+                   if(person.getPersonID() == relationship.getPerson2ID()){
+                       name = person.getName();
+                   }
+               }
            }
        }
         model.addAttribute("people" , returnPerson);
@@ -75,23 +81,11 @@ public class RoutesController {
         model.addAttribute("emails" , returnEmail);
         model.addAttribute("addresses" , returnAddress);
         model.addAttribute("relations",returnedRelationList);
+        model.addAttribute("name", name);
         return "personProfile";
     }
 
-//    @GetMapping("/delete/{id}")
-//    public String deletePerson(@PathVariable int id , Model model) {
-//        Person returnPerson = null;
-//        for (Person person : Task17Application.people) {
-//            if (person.getPersonID() == id) {
-//                System.out.println(" --- PERSON FOUND --- ");
-//                returnPerson = person;
-//            }
-//        }
-//        model.addAttribute("person" , returnPerson);
-//        return "delete";
-//    }
-
-    @GetMapping("/update/{ID}")
+    @GetMapping("/person/update/{ID}")
     public String updatePerson(@PathVariable int ID, Model model){
         Person returnPerson = null;
         Email returnEmail = null;
