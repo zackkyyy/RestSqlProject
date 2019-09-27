@@ -1,30 +1,34 @@
-# RestSqlProject
-Team members: 
-Zacky Kharboutli,
-Tim Larsson, 
-Pär Söderlund, 
-Alexandra Bjäremo
+# SQL to REST WebApp
 
-Spring boot application that handles queries for SQL database from web application 
+Spring boot web application that handles transaction with SQL database
 
-Website interface:
+## Usage
 
-localhost:8080/person             	lists all the persons in the databse
-localhost:8080/person/delete      	lets you delete a person
-localhost:8080/create		  	create person
-localhost:8080/person/name/<name> 	search by <name>
-localhost:8080/person/id/<id>		search by <id>
-localhost:8080/person/number/<number>	search by <number>
-localhost:8080/person/update/<id>	update by <id>
+This application can is hosted on Heroku:[https://personsdb4task17.herokuapp.com/](https://personsdb4task17.herokuapp.com/)  
+
+For browseing localy:
+### APIs
+[list all persons as JSON](localhost:8080/api/people)             
+[list all emails as JSON](localhost:8080/api/emails)    
+[list all phones JSON](localhost:8080/api/phones)  
+[list all addressesas JSON](localhost:8080/api/addressesas )     
+[list all relations as JSON](localhost:8080/api/relations )    
+
+### Web Interface
+[lists all the persons ](localhost:8080/person)             
+[Create person object](localhost:8080/create)    
+[Delete person object](localhost:8080/delete)             
+[Search person by First name or last name](localhost:8080/person/name/billy)             
+[Search person by ID](localhost:8080/person/id/1) 
+[Search person by Phone number](localhost:8080/person/number/23456)     
+[Update person object](localhost:8080/person/update/)             
+
+                    
+ 
+## Contributers
+Zacky Kharboutli, Tim Larsson, Pär Söderlund, Alexandra Bjäremo
 
 
-Apis:
 
-localhost:8080/api/people         	list all persons as JSON
-localhost:8080/api/emails        	list all emails as JSON
-localhost:8080/api/phones        	list all phones as JSON
-localhost:8080/api/addresses         	list all addresses as JSON
-localhost:8080/api/relations         	list all relations as JSON
-
-Heroku link
-https://personsdb4task17.herokuapp.com/ 
+## License
+This is an assignment for the Experis Education in Java 8 Full stack
