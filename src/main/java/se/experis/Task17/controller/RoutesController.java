@@ -28,6 +28,23 @@ public class RoutesController {
         model.addAttribute("people" , arr);
         return "peoplePage";
     }
+
+    public Person findbyID(int id){
+        Person p = null;
+        for( Person pers : Task17Application.people){
+            if(pers.getPersonID()==id){
+                p=pers;
+            }
+        }
+        return p;
+    }
+
+    @GetMapping("/person/delete/{id}")
+    public void deletePerson(@PathVariable int id){
+        System.out.println("here");
+        DbHandler dbHandler = new DbHandler();
+        dbHandler.deletePerson(findbyID(id));
+    }
     @GetMapping("/person/id/{ID}")
     public String personGet(@PathVariable int ID, Model model) {
 
